@@ -31,7 +31,7 @@ bool MyApp::OnInit() {
     // Show it
     frame->Show(true);
 
-    // Start tje event loop
+    // Start the event loop
     return true;
 }
 
