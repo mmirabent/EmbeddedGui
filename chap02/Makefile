@@ -2,7 +2,7 @@
 
 CXX=clang++
 CXXFLAGS=$(shell wx-config-2.8 --cxxflags)
-LDLIBS=$(shell wx-config-2.8 --libs)
+LDLIBS=$(shell wx-config-2.8 --libs) -lstdc++
 
 OBJECTS=main.o
 MAIN=main
