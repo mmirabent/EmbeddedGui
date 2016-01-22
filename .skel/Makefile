@@ -8,3 +8,8 @@ OBJECTS=stuff.o
 MAIN=stuff
 
 $(MAIN) : $(OBJECTS)
+
+clean :
+	rm $(OBJECTS) $(main)
+
+.PHONY : clean
