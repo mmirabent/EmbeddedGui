@@ -15,7 +15,7 @@ then
 
 	# Copy the files to the new directory
 	echo Copying skeleton files to new directory $1
-	cp .skel/* $1
+	cp -r .skel/. $1/
 else
 	echo Directory $1 already exists
 fi
