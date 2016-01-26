@@ -11,6 +11,6 @@ MAIN=main
 $(MAIN) : $(OBJECTS)
 
 clean :
-	rm $(OBJECTS) $(main)
+	rm -f $(OBJECTS) $(main)
 
 .PHONY : clean
