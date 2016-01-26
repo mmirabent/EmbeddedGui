@@ -2,7 +2,7 @@
 
 CXX=clang++
 CXXFLAGS=$(shell wx-config --version=2.8 --cxxflags)
-LDLIBS=$(shell wx-config --version=2.8 --libs)
+LDLIBS=$(shell wx-config --version=2.8 --libs) -lstdc++
 
 OBJECTS=stuff.o
 MAIN=stuff
@@ -10,6 +10,6 @@ MAIN=stuff
 $(MAIN) : $(OBJECTS)
 
 clean :
-	rm $(OBJECTS) $(main)
+	rm -f $(OBJECTS) $(main)
 
 .PHONY : clean
