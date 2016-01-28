@@ -9,13 +9,12 @@ int main() {
     // Local variables
     bool done = false;
     int x, y, z, i, j, k;
-    int** myArray;
+    int*** myArray;
     string welcome_msg  = "Welcome to the 3D Array Exercise";
     string rows_msg     = "How many rows you would like: ";
     string cols_msg     = "How many columns you would like: ";
     string height_msg   = "How many layers would you like: ";
     string repeat_msg   = "Would you like to create another array [Y/n]? ";
-    string alloc_error  = "Not enough memory for an array of that size.";
     string number_error = "Please enter positive numbers";
     string another_one  = "";
 
@@ -44,33 +43,41 @@ int main() {
             continue;
         }
 
-        try {
-            // Allocate a 2d array
-            myArray = new int*[x];
+        // Allocate a 3d array
+        myArray = new int**[x];
             for(i = 0; i < x; i++) {
-                myArray[i] = new int[y];
+                myArray[i] = new int*[y];
+                for(j = 0; j < y; j++) {
+                    myArray[i][j] = new int[z];
+                }
             }
 
             // Fill the array 
             for(i = 0; i < x; i++) {
                 for(j = 0; j < y; j++) {
-                    myArray[i][j] = rand() % 100 + 1; // Random numbers 1-100
+                    for(k = 0; k < z; k++) {
+                        myArray[i][j][k] = rand() % 100 + 1; // Random numbers 1-100
+                    }
                 }
             }
 
             // Print the array
-            for(i = 0; i < x; i++) {
-                for(j = 0; j < y; j++) {
-                    cout << myArray[i][j] << " ";
+            for(k = 0; k < z; k++) {
+                cout << "Z: " << k << endl;
+                for(i = 0; i < x; i++) {
+                    for(j = 0; j < y; j++) {
+                        cout << myArray[i][j][k] << " ";
+                    }
+                    cout << endl;
                 }
                 cout << endl;
             }
-        } catch (const bad_alloc& e) {
-            cout << alloc_error << endl;
-        }
 
         // Delete the array
         for(i = 0; i < x; i++) {
+            for(j = 0; j < y; j++) {
+                delete[] myArray[i][j];
+            }
             delete[] myArray[i];
         }
         delete[] myArray;
