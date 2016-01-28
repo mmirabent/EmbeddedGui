@@ -8,14 +8,15 @@ int main() {
 
     // Local variables
     bool done = false;
-    int x, y, i, j;
+    int x, y, z, i, j, k;
     int** myArray;
-    string welcome_msg  = "Welcome to the 2D Array Exercise";
+    string welcome_msg  = "Welcome to the 3D Array Exercise";
     string rows_msg     = "How many rows you would like: ";
     string cols_msg     = "How many columns you would like: ";
+    string height_msg   = "How many layers would you like: ";
     string repeat_msg   = "Would you like to create another array [Y/n]? ";
     string alloc_error  = "Not enough memory for an array of that size.";
-    string number_error = "Please enter positive numbers of rows and columns";
+    string number_error = "Please enter positive numbers";
     string another_one  = "";
 
     // Display a nice welcome message
@@ -27,15 +28,18 @@ int main() {
         // Reset x and y
         x = 0;
         y = 0;
+        z = 0;
 
         // Get x and y from user
         cout << rows_msg;
         cin >> x;
         cout << cols_msg;
         cin >> y;
+        cout << height_msg;
+        cin >> z;
 
-        // Check x and y for correctness
-        if(x <= 0 || y <= 0) {
+        // Check x, y, and z for correctness
+        if(x <= 0 || y <= 0 || z <= 0) {
             cout << number_error << endl;
             continue;
         }
