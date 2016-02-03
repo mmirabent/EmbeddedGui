@@ -16,4 +16,10 @@ main.o : main.cpp Cell.h
 clean :
 	rm -f $(OBJECTS) $(MAIN)
 
-.PHONY : clean
+run : $(MAIN)
+	$(MAIN)
+
+format :
+	clang-format -style=file -i *.h *.cpp
+
+.PHONY : clean run format

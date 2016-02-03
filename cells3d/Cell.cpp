@@ -9,11 +9,9 @@ void Cell::tick() {
     cout << this->loc.z << endl;
 }
 
-Cell::Cell() {
-    Cell(0,0,0);
-}
+Cell::Cell() { Cell(0, 0, 0); }
 
-Cell::Cell(int x, int y, int z)  {
+Cell::Cell(int x, int y, int z) {
     this->loc.x = x;
     this->loc.y = y;
     this->loc.z = z;
@@ -21,7 +19,4 @@ Cell::Cell(int x, int y, int z)  {
     functions = new FuncPointer[3];
 }
 
-Cell::~Cell() {
-    delete[] functions;
-}
-
+Cell::~Cell() { delete[] functions; }

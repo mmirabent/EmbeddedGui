@@ -2,25 +2,25 @@
 #define MVM_CELL_H
 
 class Cell {
-    public:
-        // Location struct
-        struct Location {
-            int x;
-            int y;
-            int z;
-        } loc;
+  public:
+    // Location struct
+    struct Location {
+        int x;
+        int y;
+        int z;
+    } loc;
 
-        // Array of three function pointers
-        typedef void (*FuncPointer)(void);
-        FuncPointer* functions;
+    // Array of three function pointers
+    typedef void (*FuncPointer)(void);
+    FuncPointer *functions;
 
-        // Tick function
-        void tick();
+    // Tick function
+    void tick();
 
-        // Constructor/destructor
-        Cell();
-        Cell(int x, int y, int z);
-        ~Cell();
+    // Constructor/destructor
+    Cell();
+    Cell(int x, int y, int z);
+    ~Cell();
 };
 
 #endif /* Cell.h */
