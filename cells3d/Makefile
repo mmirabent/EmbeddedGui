@@ -17,7 +17,7 @@ clean :
 	rm -f $(OBJECTS) $(MAIN)
 
 run : $(MAIN)
-	$(MAIN)
+	./$(MAIN)
 
 format :
 	clang-format -style=file -i *.h *.cpp
