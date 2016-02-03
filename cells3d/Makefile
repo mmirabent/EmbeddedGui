@@ -10,6 +10,8 @@ OBJECTS=main.o Cell.o
 MAIN=main
 
 $(MAIN) : $(OBJECTS)
+Cell.o : Cell.cpp Cell.h
+main.o : main.cpp Cell.h
 
 clean :
 	rm -f $(OBJECTS) $(MAIN)
