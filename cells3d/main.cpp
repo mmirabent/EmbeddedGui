@@ -92,6 +92,5 @@ int main() {
         if (another_one == "n" || another_one == "N") {
             done = true;
         }
-
     } // While
 } // Main

@@ -22,4 +22,6 @@ run : $(MAIN)
 format :
 	clang-format -style=file -i *.h *.cpp
 
-.PHONY : clean run format
+remake : clean $(MAIN)
+
+.PHONY : clean run format remake
