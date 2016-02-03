@@ -19,8 +19,8 @@ class Cell {
 
         // Constructor/destructor
         Cell();
+        Cell(int x, int y, int z);
         ~Cell();
-
 };
 
-#endif
+#endif /* Cell.h */
