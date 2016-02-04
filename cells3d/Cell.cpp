@@ -24,6 +24,7 @@ void Cell::tick() {
     cout << this->loc.x << " ";
     cout << this->loc.y << " ";
     cout << this->loc.z << endl;
+    functions[rand() % 3]();
 }
 
 void Cell::f1() {
