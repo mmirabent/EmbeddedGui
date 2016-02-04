@@ -2,7 +2,11 @@
 #define MVM_CELL_H
 
 class Cell {
-  public:
+  private:
+    static void f1(void);
+    static void f2(void);
+    static void f3(void);
+
     // Location struct
     struct Location {
         int x;
@@ -14,6 +18,7 @@ class Cell {
     typedef void (*FuncPointer)(void);
     FuncPointer *functions;
 
+  public:
     // Tick function
     void tick();
 
