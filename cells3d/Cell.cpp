@@ -11,6 +11,9 @@ Cell::Cell(int x, int y, int z) {
     this->loc.z = z;
 
     functions = new FuncPointer[3];
+    functions[0] = f1;
+    functions[1] = f2;
+    functions[2] = f3;
 }
 
 Cell::~Cell() { delete[] functions; }
