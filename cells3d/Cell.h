@@ -6,7 +6,6 @@ class Cell {
     static void f1(void);
     static void f2(void);
     static void f3(void);
-    void init(int x, int y, int z);
 
     // Location struct
     struct Location {

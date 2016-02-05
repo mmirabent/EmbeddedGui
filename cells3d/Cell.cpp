@@ -3,13 +3,9 @@
 
 using namespace std;
 
-Cell::Cell() { init(0, 0, 0); }
+Cell::Cell() : Cell(0, 0, 0) {}
 
-Cell::Cell(int x, int y, int z) { init(x, y, z); }
-
-Cell::~Cell() { delete[] functions; }
-
-void Cell::init(int x, int y, int z) {
+Cell::Cell(int x, int y, int z) {
     this->loc.x = x;
     this->loc.y = y;
     this->loc.z = z;
@@ -19,6 +15,8 @@ void Cell::init(int x, int y, int z) {
     functions[1] = f2;
     functions[2] = f3;
 }
+
+Cell::~Cell() { delete[] functions; }
 
 void Cell::tick() {
     cout << this->loc.x << " ";

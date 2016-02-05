@@ -1,10 +1,8 @@
 # Makefile for Embedded GUI wxWidgets projects
 
 CXX=clang++
-CC=clang++
-CXXFLAGS=-Weverything -pedantic -std=c++03 -Wno-padded
-#CXXFLAGS=$(shell wx-config --version=2.8 --cxxflags)
-#LDLIBS=$(shell wx-config --version=2.8 --libs)
+CC=$(CXX)
+CXXFLAGS=-Weverything -pedantic -std=c++11 -Wno-padded -Wno-c++98-compat
 
 OBJECTS=main.o Cell.o
 MAIN=main
