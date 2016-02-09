@@ -19,9 +19,10 @@ Cell::Cell(int x, int y, int z) {
 Cell::~Cell() { delete[] functions; }
 
 void Cell::tick() {
-    cout << this->loc.x << " ";
-    cout << this->loc.y << " ";
-    cout << this->loc.z << endl;
+    cout << "Cell(";
+    cout << this->loc.x << ",";
+    cout << this->loc.y << ",";
+    cout << this->loc.z << ")" << endl;
     functions[rand() % 3]();
 }
 

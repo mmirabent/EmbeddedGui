@@ -57,7 +57,7 @@ int main() {
         for (k = 0; k < z; k++) {
             for (j = 0; j < y; j++) {
                 for (i = 0; i < x; i++) {
-                    myArray[k][j][i] = new Cell();
+                    myArray[k][j][i] = new Cell(i,j,k);
                 }
             }
         }
