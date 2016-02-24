@@ -1087,26 +1087,30 @@
 1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawApp.h
 	<wx/app.h>
 
-1456324653 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
+1456331716 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
 	<vector>
 	<wx/sizer.h>
 	<wx/menu.h>
 	<wx/panel.h>
 	<wx/statusbr.h>
+	<wx/filepicker.h>
 	<wx/frame.h>
 	<wx/clrpicker.h>
 	<wx/choice.h>
 
-1456325628 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
+1456332049 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
 	"ClickAndDrawMain.h"
 	<wx/msgdlg.h>
 	<iostream>
 	<wx/dcclient.h>
+	<wx/dcmemory.h>
 	<wx/dc.h>
 	<wx/panel.h>
 	<wx/clrpicker.h>
 	<wx/choice.h>
 	<wx/window.h>
+	<wx/image.h>
+	<wx/bitmap.h>
 	<wx/string.h>
 	<wx/intl.h>
 
@@ -1158,4 +1162,155 @@
 	"wx/utils.h"
 	"wx/gdicmn.h"
 	"wx/math.h"
+
+1449428240 /usr/include/wx-3.0/wx/filepicker.h
+	"wx/defs.h"
+	"wx/pickerbase.h"
+	"wx/filename.h"
+	"wx/gtk/filepicker.h"
+	"wx/generic/filepickerg.h"
+
+1449428235 /usr/include/wx-3.0/wx/filename.h
+	"wx/arrstr.h"
+	"wx/filefn.h"
+	"wx/datetime.h"
+	"wx/intl.h"
+	"wx/longlong.h"
+	"wx/file.h"
+
+1449428235 /usr/include/wx-3.0/wx/file.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/filefn.h"
+	"wx/convauto.h"
+
+1449428234 /usr/include/wx-3.0/wx/convauto.h
+	"wx/strconv.h"
+	"wx/fontenc.h"
+
+1449428243 /usr/include/wx-3.0/wx/gtk/filepicker.h
+	"wx/generic/filepickerg.h"
+
+1449428243 /usr/include/wx-3.0/wx/generic/filepickerg.h
+	"wx/button.h"
+	"wx/filedlg.h"
+	"wx/dirdlg.h"
+
+1449428237 /usr/include/wx-3.0/wx/filedlg.h
+	"wx/defs.h"
+	"wx/dialog.h"
+	"wx/arrstr.h"
+	"wx/generic/filedlgg.h"
+	"wx/msw/filedlg.h"
+	"wx/motif/filedlg.h"
+	"wx/gtk/filedlg.h"
+	"wx/gtk1/filedlg.h"
+	"wx/osx/filedlg.h"
+	"wx/cocoa/filedlg.h"
+	"wx/os2/filedlg.h"
+
+1449428243 /usr/include/wx-3.0/wx/gtk/filedlg.h
+	"wx/gtk/filectrl.h"
+
+1449428243 /usr/include/wx-3.0/wx/gtk/filectrl.h
+	"wx/control.h"
+	"wx/filectrl.h"
+
+1449428240 /usr/include/wx-3.0/wx/filectrl.h
+	"wx/defs.h"
+	"wx/string.h"
+	"wx/event.h"
+	"wx/gtk/filectrl.h"
+	"wx/generic/filectrlg.h"
+
+1449428238 /usr/include/wx-3.0/wx/generic/filectrlg.h
+	"wx/containr.h"
+	"wx/listctrl.h"
+	"wx/filectrl.h"
+	"wx/filename.h"
+
+1449428241 /usr/include/wx-3.0/wx/listctrl.h
+	"wx/defs.h"
+	"wx/listbase.h"
+	"wx/msw/listctrl.h"
+	"wx/osx/listctrl.h"
+	"wx/generic/listctrl.h"
+
+1449428241 /usr/include/wx-3.0/wx/listbase.h
+	"wx/colour.h"
+	"wx/font.h"
+	"wx/gdicmn.h"
+	"wx/event.h"
+	"wx/control.h"
+
+1449428243 /usr/include/wx-3.0/wx/generic/listctrl.h
+	"wx/containr.h"
+	"wx/scrolwin.h"
+	"wx/textctrl.h"
+
+1449428239 /usr/include/wx-3.0/wx/scrolwin.h
+	"wx/panel.h"
+	"wx/gtk/scrolwin.h"
+	"wx/gtk1/scrolwin.h"
+	"wx/generic/scrolwin.h"
+
+1449428244 /usr/include/wx-3.0/wx/gtk/scrolwin.h
+
+1449428238 /usr/include/wx-3.0/wx/generic/scrolwin.h
+
+1449428239 /usr/include/wx-3.0/wx/textctrl.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/textentry.h"
+	"wx/dynarray.h"
+	"wx/gdicmn.h"
+	"wx/ioswrap.h"
+	"wx/x11/textctrl.h"
+	"wx/univ/textctrl.h"
+	"wx/msw/wince/textctrlce.h"
+	"wx/msw/textctrl.h"
+	"wx/motif/textctrl.h"
+	"wx/gtk/textctrl.h"
+	"wx/gtk1/textctrl.h"
+	"wx/osx/textctrl.h"
+	"wx/cocoa/textctrl.h"
+	"wx/os2/textctrl.h"
+
+1449428239 /usr/include/wx-3.0/wx/textentry.h
+	"wx/filefn.h"
+	"wx/gdicmn.h"
+	"wx/gtk/textentry.h"
+	"wx/osx/textentry.h"
+	"wx/msw/textentry.h"
+	"wx/motif/textentry.h"
+	"wx/os2/textentry.h"
+
+1449428244 /usr/include/wx-3.0/wx/gtk/textentry.h
+
+1449428235 /usr/include/wx-3.0/wx/ioswrap.h
+	"wx/beforestd.h"
+	<iostream.h>
+	<iostream>
+	"wx/afterstd.h"
+	"wx/msw/winundef.h"
+
+1449428244 /usr/include/wx-3.0/wx/gtk/textctrl.h
+
+1449428237 /usr/include/wx-3.0/wx/dirdlg.h
+	"wx/dialog.h"
+	"wx/generic/dirdlgg.h"
+	"wx/generic/dirdlgg.h"
+	"wx/generic/dirdlgg.h"
+	"wx/msw/dirdlg.h"
+	"wx/gtk/dirdlg.h"
+	"wx/generic/dirdlgg.h"
+	"wx/osx/dirdlg.h"
+	"wx/cocoa/dirdlg.h"
+	"wx/generic/dirdlgg.h"
+
+1449428243 /usr/include/wx-3.0/wx/gtk/dirdlg.h
+
+1449428237 /usr/include/wx-3.0/wx/dcmemory.h
+	"wx/dc.h"
+	"wx/bitmap.h"
 

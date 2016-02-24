@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxFrame" name="ClickAndDrawFrame">
+		<id_arg>0</id_arg>
 		<object class="wxBoxSizer" variable="HorizontalSizer" member="no">
 			<object class="sizeritem">
 				<object class="wxPanel" name="ID_PANEL1" variable="DrawPanel" member="yes">
@@ -21,7 +22,7 @@
 						<object class="wxColourPickerCtrl" name="ID_COLOURPICKERCTRL1" variable="ColorPicker" member="yes">
 							<colour>#000000</colour>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
@@ -32,10 +33,22 @@
 								<item>2</item>
 								<item>5</item>
 								<item>10</item>
+								<item>20</item>
 							</content>
 							<selection>0</selection>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL1" variable="FilePicker" member="yes">
+							<message>Please choose where to save the drawing</message>
+							<wildcard>*.bmp</wildcard>
+							<style>wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE</style>
+							<handler function="OnFilePickerFileChanged" entry="EVT_FILEPICKER_CHANGED" />
+						</object>
+						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

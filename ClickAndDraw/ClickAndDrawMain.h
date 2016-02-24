@@ -17,6 +17,7 @@
 #include <wx/menu.h>
 #include <wx/panel.h>
 #include <wx/statusbr.h>
+#include <wx/filepicker.h>
 #include <wx/frame.h>
 #include <wx/clrpicker.h>
 #include <wx/choice.h>
@@ -38,6 +39,7 @@ class ClickAndDrawFrame: public wxFrame
         } mode;
 
         wxPen* pen;
+        wxBitmap* bitmap;
 
         void changeMode(Modes NewMode);
 
@@ -47,12 +49,14 @@ class ClickAndDrawFrame: public wxFrame
         void OnDrawPanelLeftDown(wxMouseEvent& event);
         void OnDrawPanelLeftDoubleClick(wxMouseEvent& event);
         void OnDrawPanelPaint(wxPaintEvent& event);
+        void OnFilePickerFileChanged(wxFileDirPickerEvent& event);
         //*)
 
         //(*Identifiers(ClickAndDrawFrame)
         static const long ID_PANEL1;
         static const long ID_COLOURPICKERCTRL1;
         static const long ID_CHOICE1;
+        static const long ID_FILEPICKERCTRL1;
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
@@ -61,6 +65,7 @@ class ClickAndDrawFrame: public wxFrame
         //(*Declarations(ClickAndDrawFrame)
         wxStatusBar* StatusBar1;
         wxPanel* DrawPanel;
+        wxFilePickerCtrl* FilePicker;
         wxColourPickerCtrl* ColorPicker;
         wxChoice* ThicknessPicker;
         //*)
