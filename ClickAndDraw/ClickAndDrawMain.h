@@ -19,6 +19,7 @@
 #include <wx/statusbr.h>
 #include <wx/filepicker.h>
 #include <wx/frame.h>
+#include <wx/stattext.h>
 #include <wx/clrpicker.h>
 #include <wx/choice.h>
 //*)
@@ -56,6 +57,7 @@ class ClickAndDrawFrame: public wxFrame
         static const long ID_PANEL1;
         static const long ID_COLOURPICKERCTRL1;
         static const long ID_CHOICE1;
+        static const long ID_STATICTEXT1;
         static const long ID_FILEPICKERCTRL1;
         static const long idMenuQuit;
         static const long idMenuAbout;
@@ -66,6 +68,7 @@ class ClickAndDrawFrame: public wxFrame
         wxStatusBar* StatusBar1;
         wxPanel* DrawPanel;
         wxFilePickerCtrl* FilePicker;
+        wxStaticText* StaticText1;
         wxColourPickerCtrl* ColorPicker;
         wxChoice* ThicknessPicker;
         //*)

@@ -55,6 +55,7 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 const long ClickAndDrawFrame::ID_PANEL1 = wxNewId();
 const long ClickAndDrawFrame::ID_COLOURPICKERCTRL1 = wxNewId();
 const long ClickAndDrawFrame::ID_CHOICE1 = wxNewId();
+const long ClickAndDrawFrame::ID_STATICTEXT1 = wxNewId();
 const long ClickAndDrawFrame::ID_FILEPICKERCTRL1 = wxNewId();
 const long ClickAndDrawFrame::idMenuQuit = wxNewId();
 const long ClickAndDrawFrame::idMenuAbout = wxNewId();
@@ -78,6 +79,7 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     wxMenuItem* MenuItem1;
     wxBoxSizer* HorizontalSizer;
     wxMenu* Menu1;
+    wxBoxSizer* BoxSizer1;
     wxMenuBar* MenuBar1;
     wxMenu* Menu2;
 
@@ -97,8 +99,12 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     ThicknessPicker->Append(_("10"));
     ThicknessPicker->Append(_("20"));
     VerticalSizer->Add(ThicknessPicker, 1, wxALL|wxEXPAND, 5);
+    BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
+    StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Save"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+    BoxSizer1->Add(StaticText1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     FilePicker = new wxFilePickerCtrl(this, ID_FILEPICKERCTRL1, wxEmptyString, _("Please choose where to save the drawing"), _T("*.bmp"), wxDefaultPosition, wxDefaultSize, wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE, wxDefaultValidator, _T("ID_FILEPICKERCTRL1"));
-    VerticalSizer->Add(FilePicker, 1, wxALL|wxEXPAND, 5);
+    BoxSizer1->Add(FilePicker, 1, wxALL|wxEXPAND, 5);
+    VerticalSizer->Add(BoxSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     HorizontalSizer->Add(VerticalSizer, 0, wxALL|wxALIGN_TOP, 5);
     SetSizer(HorizontalSizer);
     MenuBar1 = new wxMenuBar();
@@ -127,6 +133,8 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ClickAndDrawFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ClickAndDrawFrame::OnAbout);
     //*)
+
+    FilePicker->SetLabel(wxT("Save"));
 
     // Initial mode is color select mode
     changeMode(ColorSelectMode);
@@ -218,32 +226,43 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
 
     switch(NewMode) {
     case ColorSelectMode:
-        // Enable color selection controls
+        // Clear the draw points
         drawPoints->clear();
+
+        // Enable the color controls and disable the file picker
         ColorPicker->Enable();
         ThicknessPicker->Enable();
-        DrawPanel->Refresh();
         FilePicker->Disable();
+
+        // Refresh the draw panel
+        DrawPanel->Refresh();
+
+        // Update the status bar
         StatusBar1->SetStatusText(wxT("Color Selection Mode"));
         break;
 
     case ClickMode:
-        // Disable color selection controls
+        // Disable color selection controls and the file picker
         ColorPicker->Disable();
         ThicknessPicker->Disable();
         FilePicker->Disable();
+
+        // Update the status bar
         StatusBar1->SetStatusText(wxT("Drawing Mode"));
         break;
 
     case DrawMode:
-        // Set the pen and force a refresh
-        wxColor color = ColorPicker->GetColour();
+        // Get the chosen color and line thickness
+        wxColor  color           = ColorPicker->GetColour();
         wxString thicknessString = ThicknessPicker->GetString(ThicknessPicker->GetSelection());
         int thickness = wxAtoi(thicknessString);
 
         pen = new wxPen(color, thickness);
+
         DrawPanel->Refresh();
+
         FilePicker->Enable();
+
         StatusBar1->SetStatusText(wxT("Viewing Mode"));
         break;
     }
@@ -251,19 +270,22 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
 
 void ClickAndDrawFrame::OnFilePickerFileChanged(wxFileDirPickerEvent& event)
 {
+    // Get the selected file
     wxString file = FilePicker->GetPath();
 
+    // Get the extension using std::string. The wxwidgets docs advised to use
+    // std::string and only to convert to wxString when necessary
     std::string path = file.ToStdString();
-    std::string ext = path.substr(path.length()-4); // Grab the last four characters
+    std::string ext = path.substr(path.length() - 4); // Grab the last four characters
 
+    // If the extension isn't .bmp, append it
     if(ext != ".bmp") {
         path += ".bmp";
     }
 
+    // Check if the bitmap has valid data
     if(bitmap->IsOk()) {
-        wxImage image = bitmap->ConvertToImage();
-        image.SaveFile(wxString(path), wxBITMAP_TYPE_BMP);
-    } else {
-
+        wxImage image = bitmap->ConvertToImage();           // Convert the wxBitmap to a wxImage
+        image.SaveFile(wxString(path), wxBITMAP_TYPE_BMP);  // Save the wxImage to the file path as a BMP
     }
 }

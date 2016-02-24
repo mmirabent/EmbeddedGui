@@ -42,13 +42,27 @@
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL1" variable="FilePicker" member="yes">
-							<message>Please choose where to save the drawing</message>
-							<wildcard>*.bmp</wildcard>
-							<style>wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE</style>
-							<handler function="OnFilePickerFileChanged" entry="EVT_FILEPICKER_CHANGED" />
+						<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+									<label>Save</label>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL1" variable="FilePicker" member="yes">
+									<message>Please choose where to save the drawing</message>
+									<wildcard>*.bmp</wildcard>
+									<style>wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE</style>
+									<handler function="OnFilePickerFileChanged" entry="EVT_FILEPICKER_CHANGED" />
+								</object>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
-						<flag>wxALL|wxEXPAND</flag>
+						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>

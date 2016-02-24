@@ -1087,7 +1087,7 @@
 1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawApp.h
 	<wx/app.h>
 
-1456331716 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
+1456337246 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
 	<vector>
 	<wx/sizer.h>
 	<wx/menu.h>
@@ -1095,10 +1095,11 @@
 	<wx/statusbr.h>
 	<wx/filepicker.h>
 	<wx/frame.h>
+	<wx/stattext.h>
 	<wx/clrpicker.h>
 	<wx/choice.h>
 
-1456335521 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
+1456336339 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
 	"ClickAndDrawMain.h"
 	<wx/msgdlg.h>
 	<iostream>
@@ -1313,4 +1314,18 @@
 1449428237 /usr/include/wx-3.0/wx/dcmemory.h
 	"wx/dc.h"
 	"wx/bitmap.h"
+
+1449428239 /usr/include/wx-3.0/wx/stattext.h
+	"wx/defs.h"
+	"wx/control.h"
+	"wx/univ/stattext.h"
+	"wx/msw/stattext.h"
+	"wx/motif/stattext.h"
+	"wx/gtk/stattext.h"
+	"wx/gtk1/stattext.h"
+	"wx/osx/stattext.h"
+	"wx/cocoa/stattext.h"
+	"wx/os2/stattext.h"
+
+1449428244 /usr/include/wx-3.0/wx/gtk/stattext.h
 
