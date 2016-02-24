@@ -14,7 +14,7 @@
 #include <wx/image.h>
 //*)
 
-IMPLEMENT_APP(ClickAndDrawApp);
+IMPLEMENT_APP(ClickAndDrawApp)
 
 bool ClickAndDrawApp::OnInit()
 {

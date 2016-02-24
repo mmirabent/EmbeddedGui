@@ -224,6 +224,7 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
         ThicknessPicker->Enable();
         DrawPanel->Refresh();
         FilePicker->Disable();
+        StatusBar1->SetStatusText(wxT("Color Selection Mode"));
         break;
 
     case ClickMode:
@@ -231,6 +232,7 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
         ColorPicker->Disable();
         ThicknessPicker->Disable();
         FilePicker->Disable();
+        StatusBar1->SetStatusText(wxT("Drawing Mode"));
         break;
 
     case DrawMode:
@@ -242,6 +244,7 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
         pen = new wxPen(color, thickness);
         DrawPanel->Refresh();
         FilePicker->Enable();
+        StatusBar1->SetStatusText(wxT("Viewing Mode"));
         break;
     }
 }
@@ -249,9 +252,17 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
 void ClickAndDrawFrame::OnFilePickerFileChanged(wxFileDirPickerEvent& event)
 {
     wxString file = FilePicker->GetPath();
+
+    std::string path = file.ToStdString();
+    std::string ext = path.substr(path.length()-4); // Grab the last four characters
+
+    if(ext != ".bmp") {
+        path += ".bmp";
+    }
+
     if(bitmap->IsOk()) {
         wxImage image = bitmap->ConvertToImage();
-        image.SaveFile(file, wxBITMAP_TYPE_BMP);
+        image.SaveFile(wxString(path), wxBITMAP_TYPE_BMP);
     } else {
 
     }
