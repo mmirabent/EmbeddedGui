@@ -1087,7 +1087,7 @@
 1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawApp.h
 	<wx/app.h>
 
-1456323529 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
+1456324653 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
 	<vector>
 	<wx/sizer.h>
 	<wx/menu.h>
@@ -1097,12 +1097,16 @@
 	<wx/clrpicker.h>
 	<wx/choice.h>
 
-1456292244 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
+1456325628 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
 	"ClickAndDrawMain.h"
 	<wx/msgdlg.h>
 	<iostream>
 	<wx/dcclient.h>
 	<wx/dc.h>
+	<wx/panel.h>
+	<wx/clrpicker.h>
+	<wx/choice.h>
+	<wx/window.h>
 	<wx/string.h>
 	<wx/intl.h>
 

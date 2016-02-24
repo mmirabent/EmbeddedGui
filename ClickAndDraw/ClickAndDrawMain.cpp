@@ -87,6 +87,10 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     ColorPicker = new wxColourPickerCtrl(this, ID_COLOURPICKERCTRL1, wxColour(0,0,0), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_COLOURPICKERCTRL1"));
     VerticalSizer->Add(ColorPicker, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     ThicknessPicker = new wxChoice(this, ID_CHOICE1, wxDefaultPosition, wxDefaultSize, 0, 0, 0, wxDefaultValidator, _T("ID_CHOICE1"));
+    ThicknessPicker->SetSelection( ThicknessPicker->Append(_("1")) );
+    ThicknessPicker->Append(_("2"));
+    ThicknessPicker->Append(_("5"));
+    ThicknessPicker->Append(_("10"));
     VerticalSizer->Add(ThicknessPicker, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     HorizontalSizer->Add(VerticalSizer, 0, wxALL|wxALIGN_TOP, 5);
     SetSizer(HorizontalSizer);
@@ -179,7 +183,7 @@ void ClickAndDrawFrame::OnDrawPanelPaint(wxPaintEvent& event)
 {
     if(mode == DrawMode) {
         wxPaintDC dc(DrawPanel);
-        dc.SetPen(*wxBLUE_PEN);
+        dc.SetPen(*pen);
         dc.DrawLines(drawPoints->size(), drawPoints->data());
     }
 }
@@ -205,7 +209,11 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
 
     case DrawMode:
         // Set the pen and force a refresh
-        pen = new wxPen(*wxBLUE);
+        wxColor color = ColorPicker->GetColour();
+        wxString thicknessString = ThicknessPicker->GetString(ThicknessPicker->GetSelection());
+        int thickness = wxAtoi(thicknessString);
+
+        pen = new wxPen(color, thickness);
         DrawPanel->Refresh();
         break;
     }
