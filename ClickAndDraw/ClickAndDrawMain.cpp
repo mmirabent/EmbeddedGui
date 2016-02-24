@@ -12,6 +12,10 @@
 #include <iostream>
 #include <wx/dcclient.h>
 #include <wx/dc.h>
+#include <wx/panel.h>
+#include <wx/clrpicker.h>
+#include <wx/choice.h>
+#include <wx/window.h>
 
 //(*InternalHeaders(ClickAndDrawFrame)
 #include <wx/string.h>
@@ -77,6 +81,7 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     HorizontalSizer = new wxBoxSizer(wxHORIZONTAL);
     DrawPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
     DrawPanel->SetMinSize(wxSize(400,500));
+    DrawPanel->SetBackgroundColour(wxColour(255,255,255));
     HorizontalSizer->Add(DrawPanel, 1, wxALL|wxEXPAND, 5);
     VerticalSizer = new wxBoxSizer(wxVERTICAL);
     ColorPicker = new wxColourPickerCtrl(this, ID_COLOURPICKERCTRL1, wxColour(0,0,0), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_COLOURPICKERCTRL1"));
@@ -139,7 +144,7 @@ void ClickAndDrawFrame::OnDrawPanelLeftDown(wxMouseEvent& event)
 
     // If we were in color select mode, change the mode to clickmode
     if(mode == ColorSelectMode) {
-        mode = ClickMode;
+        changeMode(ClickMode);
     }
 
     // Get the mouse position and push it onto the end of the vector
@@ -152,26 +157,21 @@ void ClickAndDrawFrame::OnDrawPanelLeftDown(wxMouseEvent& event)
 
 void ClickAndDrawFrame::OnDrawPanelLeftDoubleClick(wxMouseEvent& event)
 {
-    /*
-    for(wxPoint p : *drawPoints) {
-            std::cout << p.x << " " << p.y << std::endl;
-    }
-    drawPoints->clear();
-    std::cout << "Double click" << std::endl;*/
-    // Add code to draw the lines
 
     switch(mode) {
+
     case ClickMode:
-        mode = DrawMode;
+        changeMode(DrawMode);
         break;
 
     case DrawMode:
-        mode = ColorSelectMode;
-        drawPoints->clear();
+        changeMode(ColorSelectMode);
+        break;
+
+    case ColorSelectMode:
+        // Do nothing
         break;
     }
-
-    DrawPanel->Refresh();
 }
 
 // This event makes sure to paint the panel again whenever it's needed and we are in the DrawMode
@@ -181,5 +181,32 @@ void ClickAndDrawFrame::OnDrawPanelPaint(wxPaintEvent& event)
         wxPaintDC dc(DrawPanel);
         dc.SetPen(*wxBLUE_PEN);
         dc.DrawLines(drawPoints->size(), drawPoints->data());
+    }
+}
+
+void ClickAndDrawFrame::changeMode(Modes NewMode)
+{
+    mode = NewMode;
+
+    switch(NewMode) {
+    case ColorSelectMode:
+        // Enable color selection controls
+        drawPoints->clear();
+        ColorPicker->Enable();
+        ThicknessPicker->Enable();
+        DrawPanel->Refresh();
+        break;
+
+    case ClickMode:
+        // Disable color selection controls
+        ColorPicker->Disable();
+        ThicknessPicker->Disable();
+        break;
+
+    case DrawMode:
+        // Set the pen and force a refresh
+        pen = new wxPen(*wxBLUE);
+        DrawPanel->Refresh();
+        break;
     }
 }

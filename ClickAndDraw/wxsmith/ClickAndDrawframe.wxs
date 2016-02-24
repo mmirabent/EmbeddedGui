@@ -4,6 +4,7 @@
 		<object class="wxBoxSizer" variable="HorizontalSizer" member="no">
 			<object class="sizeritem">
 				<object class="wxPanel" name="ID_PANEL1" variable="DrawPanel" member="yes">
+					<bg>#FFFFFF</bg>
 					<minsize>400,500</minsize>
 					<handler function="OnDrawPanelPaint" entry="EVT_PAINT" />
 					<handler function="OnDrawPanelLeftDown" entry="EVT_LEFT_DOWN" />

@@ -1087,7 +1087,7 @@
 1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawApp.h
 	<wx/app.h>
 
-1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
+1456323529 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
 	<vector>
 	<wx/sizer.h>
 	<wx/menu.h>

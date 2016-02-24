@@ -37,6 +37,10 @@ class ClickAndDrawFrame: public wxFrame
             DrawMode
         } mode;
 
+        wxPen* pen;
+
+        void changeMode(Modes NewMode);
+
         //(*Handlers(ClickAndDrawFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
