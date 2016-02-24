@@ -75,15 +75,15 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
 
     Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
     HorizontalSizer = new wxBoxSizer(wxHORIZONTAL);
-    DrawPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxSize(95,63), wxTAB_TRAVERSAL, _T("ID_PANEL1"));
-    DrawPanel->SetBackgroundColour(wxColour(255,255,255));
-    HorizontalSizer->Add(DrawPanel, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    DrawPanel = new wxPanel(this, ID_PANEL1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL, _T("ID_PANEL1"));
+    DrawPanel->SetMinSize(wxSize(400,500));
+    HorizontalSizer->Add(DrawPanel, 1, wxALL|wxEXPAND, 5);
     VerticalSizer = new wxBoxSizer(wxVERTICAL);
-    ColourPickerCtrl1 = new wxColourPickerCtrl(this, ID_COLOURPICKERCTRL1, wxColour(0,0,0), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_COLOURPICKERCTRL1"));
-    VerticalSizer->Add(ColourPickerCtrl1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    Choice1 = new wxChoice(this, ID_CHOICE1, wxDefaultPosition, wxDefaultSize, 0, 0, 0, wxDefaultValidator, _T("ID_CHOICE1"));
-    VerticalSizer->Add(Choice1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    HorizontalSizer->Add(VerticalSizer, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    ColorPicker = new wxColourPickerCtrl(this, ID_COLOURPICKERCTRL1, wxColour(0,0,0), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_COLOURPICKERCTRL1"));
+    VerticalSizer->Add(ColorPicker, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    ThicknessPicker = new wxChoice(this, ID_CHOICE1, wxDefaultPosition, wxDefaultSize, 0, 0, 0, wxDefaultValidator, _T("ID_CHOICE1"));
+    VerticalSizer->Add(ThicknessPicker, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    HorizontalSizer->Add(VerticalSizer, 0, wxALL|wxALIGN_TOP, 5);
     SetSizer(HorizontalSizer);
     MenuBar1 = new wxMenuBar();
     Menu1 = new wxMenu();

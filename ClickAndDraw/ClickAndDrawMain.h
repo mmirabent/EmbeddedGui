@@ -57,8 +57,8 @@ class ClickAndDrawFrame: public wxFrame
         //(*Declarations(ClickAndDrawFrame)
         wxStatusBar* StatusBar1;
         wxPanel* DrawPanel;
-        wxColourPickerCtrl* ColourPickerCtrl1;
-        wxChoice* Choice1;
+        wxColourPickerCtrl* ColorPicker;
+        wxChoice* ThicknessPicker;
         //*)
 
         DECLARE_EVENT_TABLE()
