@@ -1079,3 +1079,79 @@
 
 1449428243 /usr/include/wx-3.0/wx/gtk/choice.h
 
+1456292244 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawApp.cpp
+	"ClickAndDrawApp.h"
+	"ClickAndDrawMain.h"
+	<wx/image.h>
+
+1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawApp.h
+	<wx/app.h>
+
+1456292244 /home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.h
+	<vector>
+	<wx/sizer.h>
+	<wx/menu.h>
+	<wx/panel.h>
+	<wx/statusbr.h>
+	<wx/frame.h>
+	<wx/clrpicker.h>
+	<wx/choice.h>
+
+1456292244 source:/home/marcos/EmbeddedGui/ClickAndDraw/ClickAndDrawMain.cpp
+	"ClickAndDrawMain.h"
+	<wx/msgdlg.h>
+	<iostream>
+	<wx/dcclient.h>
+	<wx/dc.h>
+	<wx/string.h>
+	<wx/intl.h>
+
+1449428237 /usr/include/wx-3.0/wx/dcclient.h
+	"wx/dc.h"
+
+1449428237 /usr/include/wx-3.0/wx/dc.h
+	"wx/object.h"
+	"wx/intl.h"
+	"wx/cursor.h"
+	"wx/font.h"
+	"wx/colour.h"
+	"wx/bitmap.h"
+	"wx/brush.h"
+	"wx/pen.h"
+	"wx/palette.h"
+	"wx/dynarray.h"
+	"wx/math.h"
+	"wx/image.h"
+	"wx/region.h"
+	"wx/affinematrix2d.h"
+
+1449428237 /usr/include/wx-3.0/wx/brush.h
+	"wx/defs.h"
+	"wx/object.h"
+	"wx/gdiobj.h"
+	"wx/gdicmn.h"
+	"wx/msw/brush.h"
+	"wx/x11/brush.h"
+	"wx/gtk/brush.h"
+	"wx/gtk1/brush.h"
+	"wx/dfb/brush.h"
+	"wx/osx/brush.h"
+	"wx/cocoa/brush.h"
+	"wx/os2/brush.h"
+
+1449428242 /usr/include/wx-3.0/wx/gtk/brush.h
+
+1449428237 /usr/include/wx-3.0/wx/affinematrix2d.h
+	"wx/defs.h"
+	"wx/affinematrix2dbase.h"
+
+1449428237 /usr/include/wx-3.0/wx/affinematrix2dbase.h
+	"wx/defs.h"
+	"wx/geometry.h"
+
+1449428241 /usr/include/wx-3.0/wx/geometry.h
+	"wx/defs.h"
+	"wx/utils.h"
+	"wx/gdicmn.h"
+	"wx/math.h"
+
