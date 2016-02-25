@@ -13,13 +13,17 @@
 				<Option compiler="gcc" />
 				<Option projectLinkerOptionsRelation="2" />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="`wx-config --cflags`" />
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
 			<Add option="-Wall" />
+			<Add option="`wx-config --cflags`" />
+			<Add option="-Wno-unused-parameter" />
 		</Compiler>
 		<Linker>
 			<Add option="`wx-config --libs`" />

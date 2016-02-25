@@ -2,14 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="ClickAndDrawMain.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4959" topLine="109" />
-		</Cursor>
-	</File>
 	<File name="ClickAndDrawMain.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="901" topLine="30" />
+			<Cursor1 position="991" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="ClickAndDrawMain.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5262" topLine="116" />
+		</Cursor>
+	</File>
+	<File name="ClickAndDrawApp.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="458" topLine="13" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
