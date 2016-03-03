@@ -54,7 +54,7 @@
 							<object class="sizeritem">
 								<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL1" variable="BitmapFilePicker" member="yes">
 									<message>Please choose where to save the drawing</message>
-									<wildcard>*.bmp</wildcard>
+									<wildcard>Bitmap files (*.bmp)|*.bmp</wildcard>
 									<style>wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE</style>
 									<handler function="OnFilePickerFileChanged" entry="EVT_FILEPICKER_CHANGED" />
 								</object>
@@ -78,6 +78,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL2" variable="SavePointsFilePicker" member="yes">
+									<wildcard>CAD Points File (*.dd)|*.dd</wildcard>
 									<style>wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE</style>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -99,7 +100,9 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL3" variable="FilePickerCtrl1" member="yes" />
+								<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL3" variable="FilePickerCtrl1" member="yes">
+									<wildcard>CAD Points File (*.dd)|*.dd</wildcard>
+								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 							</object>
