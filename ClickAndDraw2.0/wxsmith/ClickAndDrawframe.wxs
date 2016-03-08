@@ -80,6 +80,7 @@
 								<object class="wxFilePickerCtrl" name="ID_FILEPICKERCTRL2" variable="SavePointsFilePicker" member="yes">
 									<wildcard>CAD Points File (*.dd)|*.dd</wildcard>
 									<style>wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE</style>
+									<handler function="OnSavePointsFilePickerFileChanged" entry="EVT_FILEPICKER_CHANGED" />
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>

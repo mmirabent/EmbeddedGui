@@ -150,6 +150,7 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     DrawPanel->Connect(wxEVT_LEFT_DOWN,(wxObjectEventFunction)&ClickAndDrawFrame::OnDrawPanelLeftDown,0,this);
     DrawPanel->Connect(wxEVT_LEFT_DCLICK,(wxObjectEventFunction)&ClickAndDrawFrame::OnDrawPanelLeftDoubleClick,0,this);
     Connect(ID_FILEPICKERCTRL1,wxEVT_COMMAND_FILEPICKER_CHANGED,(wxObjectEventFunction)&ClickAndDrawFrame::OnFilePickerFileChanged);
+    Connect(ID_FILEPICKERCTRL2,wxEVT_COMMAND_FILEPICKER_CHANGED,(wxObjectEventFunction)&ClickAndDrawFrame::OnSavePointsFilePickerFileChanged);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ClickAndDrawFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ClickAndDrawFrame::OnAbout);
     //*)
@@ -335,4 +336,18 @@ const std::string ClickAndDrawFrame::add_ext(const std::string path, const std::
     {
         return path + "." + ext; // else add the extension and return that
     }
+}
+
+void ClickAndDrawFrame::writePointsToFile(std::string file)
+{
+    std::cout << drawPoints->size(); // First write how many points there are
+
+    for(wxPoint& p : *drawPoints) {
+        std::cout << p.x << " " << p.y << std::endl; // Write each point individually
+    }
+}
+
+void ClickAndDrawFrame::OnSavePointsFilePickerFileChanged(wxFileDirPickerEvent& event)
+{
+    writePointsToFile(event.GetPath().ToStdString());
 }
