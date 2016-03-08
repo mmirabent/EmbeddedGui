@@ -11,6 +11,7 @@
 #define CLICKANDDRAWMAIN_H
 
 #include <vector>
+#include <string>
 
 //(*Headers(ClickAndDrawFrame)
 #include <wx/sizer.h>
@@ -43,6 +44,7 @@ class ClickAndDrawFrame: public wxFrame
         wxBitmap* bitmap;
 
         void changeMode(Modes NewMode);
+        const std::string add_ext(const std::string path, const std::string ext);
 
         //(*Handlers(ClickAndDrawFrame)
         void OnQuit(wxCommandEvent& event);

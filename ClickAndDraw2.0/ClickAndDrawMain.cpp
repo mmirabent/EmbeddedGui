@@ -26,8 +26,10 @@
 //*)
 
 //helper functions
-enum wxbuildinfoformat {
-    short_f, long_f };
+enum wxbuildinfoformat
+{
+    short_f, long_f
+};
 
 wxString wxbuildinfo(wxbuildinfoformat format)
 {
@@ -178,13 +180,15 @@ void ClickAndDrawFrame::OnAbout(wxCommandEvent& event)
 void ClickAndDrawFrame::OnDrawPanelLeftDown(wxMouseEvent& event)
 {
     // If we are in draw mode, ignore single clicks
-    if(mode == DrawMode) {
+    if(mode == DrawMode)
+    {
         event.Skip(); // Documentation recommended
         return;
     }
 
     // If we were in color select mode, change the mode to clickmode
-    if(mode == ColorSelectMode) {
+    if(mode == ColorSelectMode)
+    {
         changeMode(ClickMode);
     }
 
@@ -199,7 +203,8 @@ void ClickAndDrawFrame::OnDrawPanelLeftDown(wxMouseEvent& event)
 void ClickAndDrawFrame::OnDrawPanelLeftDoubleClick(wxMouseEvent& event)
 {
 
-    switch(mode) {
+    switch(mode)
+    {
 
     case ClickMode:
         changeMode(DrawMode);
@@ -218,7 +223,8 @@ void ClickAndDrawFrame::OnDrawPanelLeftDoubleClick(wxMouseEvent& event)
 // This event makes sure to paint the panel again whenever it's needed and we are in the DrawMode
 void ClickAndDrawFrame::OnDrawPanelPaint(wxPaintEvent& event)
 {
-    if(mode == DrawMode) {
+    if(mode == DrawMode)
+    {
 
         // Draw the lines
         wxPaintDC dc(DrawPanel);
@@ -242,7 +248,8 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
 {
     mode = NewMode;
 
-    switch(NewMode) {
+    switch(NewMode)
+    {
     case ColorSelectMode:
         // Clear the draw points
         drawPoints->clear();
@@ -289,21 +296,43 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
 void ClickAndDrawFrame::OnFilePickerFileChanged(wxFileDirPickerEvent& event)
 {
     // Get the selected file
-    wxString file = BitmapFilePicker->GetPath();
+    std::string file = BitmapFilePicker->GetPath().ToStdString();
+    std::string ext = "bmp";
 
-    // Get the extension using std::string. The wxwidgets docs advised to use
-    // std::string and only to convert to wxString when necessary
-    std::string path = file.ToStdString();
-    std::string ext = path.substr(path.length() - 4); // Grab the last four characters
-
-    // If the extension isn't .bmp, append it
-    if(ext != ".bmp") {
-        path += ".bmp";
-    }
+    std::string path = add_ext(file, ext);
 
     // Check if the bitmap has valid data
-    if(bitmap->IsOk()) {
+    if(bitmap->IsOk())
+    {
         wxImage image = bitmap->ConvertToImage();           // Convert the wxBitmap to a wxImage
         image.SaveFile(wxString(path), wxBITMAP_TYPE_BMP);  // Save the wxImage to the file path as a BMP
+    }
+}
+
+// Adds the extension ext, seperated by a period if it is not already at the end of the path
+const std::string ClickAndDrawFrame::add_ext(const std::string path, const std::string ext)
+{
+    // pos holds the position of the found character
+    std::string::size_type pos;
+
+    // returns the position of the last '.', or string::npos if not found
+    pos = path.find_last_of('.');
+
+    if (pos == std::string::npos)   // '.' was not found
+    {
+        return path + "." + ext;
+    }
+
+    // An extension exists, so grab it
+    std::string existing_ext = path.substr(pos+1);
+
+    // Check if it's the one we want
+    if (existing_ext == ext)
+    {
+        return path; // If existing ext was the right ext, return path unaltered
+    }
+    else
+    {
+        return path + "." + ext; // else add the extension and return that
     }
 }
