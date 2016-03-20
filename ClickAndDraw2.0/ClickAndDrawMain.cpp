@@ -10,6 +10,7 @@
 #include "ClickAndDrawMain.h"
 #include <wx/msgdlg.h>
 #include <iostream>
+#include <fstream>
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
 #include <wx/dc.h>
@@ -116,14 +117,14 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
     StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Save Points"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
     BoxSizer2->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    SavePointsFilePicker = new wxFilePickerCtrl(this, ID_FILEPICKERCTRL2, wxEmptyString, _("Select a file"), _T("CAD Points File (*.dd)|*.dd"), wxDefaultPosition, wxDefaultSize, wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE, wxDefaultValidator, _T("ID_FILEPICKERCTRL2"));
+    SavePointsFilePicker = new wxFilePickerCtrl(this, ID_FILEPICKERCTRL2, wxEmptyString, wxEmptyString, _T("CAD Points File (*.dd)|*.dd"), wxDefaultPosition, wxDefaultSize, wxFLP_OVERWRITE_PROMPT|wxFLP_SAVE, wxDefaultValidator, _T("ID_FILEPICKERCTRL2"));
     BoxSizer2->Add(SavePointsFilePicker, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     VerticalSizer->Add(BoxSizer2, 1, wxALL|wxEXPAND, 5);
     BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
     StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("LoadPoints"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
     BoxSizer3->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    FilePickerCtrl1 = new wxFilePickerCtrl(this, ID_FILEPICKERCTRL3, wxEmptyString, _("Select a file"), _T("CAD Points File (*.dd)|*.dd"), wxDefaultPosition, wxDefaultSize, wxFLP_FILE_MUST_EXIST|wxFLP_OPEN, wxDefaultValidator, _T("ID_FILEPICKERCTRL3"));
-    BoxSizer3->Add(FilePickerCtrl1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    LoadPointsFilePicker = new wxFilePickerCtrl(this, ID_FILEPICKERCTRL3, wxEmptyString, wxEmptyString, _T("CAD Points File (*.dd)|*.dd"), wxDefaultPosition, wxDefaultSize, wxFLP_FILE_MUST_EXIST|wxFLP_OPEN, wxDefaultValidator, _T("ID_FILEPICKERCTRL3"));
+    BoxSizer3->Add(LoadPointsFilePicker, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     VerticalSizer->Add(BoxSizer3, 1, wxALL|wxEXPAND, 5);
     HorizontalSizer->Add(VerticalSizer, 0, wxALL|wxALIGN_TOP, 5);
     SetSizer(HorizontalSizer);
@@ -151,6 +152,7 @@ ClickAndDrawFrame::ClickAndDrawFrame(wxWindow* parent,wxWindowID id)
     DrawPanel->Connect(wxEVT_LEFT_DCLICK,(wxObjectEventFunction)&ClickAndDrawFrame::OnDrawPanelLeftDoubleClick,0,this);
     Connect(ID_FILEPICKERCTRL1,wxEVT_COMMAND_FILEPICKER_CHANGED,(wxObjectEventFunction)&ClickAndDrawFrame::OnFilePickerFileChanged);
     Connect(ID_FILEPICKERCTRL2,wxEVT_COMMAND_FILEPICKER_CHANGED,(wxObjectEventFunction)&ClickAndDrawFrame::OnSavePointsFilePickerFileChanged);
+    Connect(ID_FILEPICKERCTRL3,wxEVT_COMMAND_FILEPICKER_CHANGED,(wxObjectEventFunction)&ClickAndDrawFrame::OnLoadPointsFilePickerFileChanged);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ClickAndDrawFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&ClickAndDrawFrame::OnAbout);
     //*)
@@ -340,14 +342,85 @@ const std::string ClickAndDrawFrame::add_ext(const std::string path, const std::
 
 void ClickAndDrawFrame::writePointsToFile(std::string file)
 {
-    std::cout << drawPoints->size(); // First write how many points there are
+    size_t vector_size;
+    char* buffer;
+
+    vector_size = drawPoints->size();
+
+    std::fstream file_stream(file, std::ios::binary | std::ios::out);
+
+    buffer = reinterpret_cast<char*>(&vector_size);
+
+    file_stream.write(buffer, sizeof(vector_size));
 
     for(wxPoint& p : *drawPoints) {
-        std::cout << p.x << " " << p.y << std::endl; // Write each point individually
+        buffer = reinterpret_cast<char*>(&p.x);
+        file_stream.write(buffer, sizeof(p.x));
+
+        buffer = reinterpret_cast<char*>(&p.y);
+        file_stream.write(buffer, sizeof(p.y));
     }
+    file_stream.close();
+}
+
+void ClickAndDrawFrame::readPointsFromFile(std::string file)
+{
+    // variables to hold the binary data read in from the file
+    size_t vector_size;
+    size_t i;
+    int x, y;
+    char* buffer;
+
+    // Open the file in binary and "in" mode
+    std::fstream file_stream(file, std::ios::binary | std::ios::in);
+
+    // read in the vector_size, first create the buffer.
+    buffer = new char[sizeof(vector_size)];
+
+    // then load the buffer with the read method
+    file_stream.read(buffer, sizeof(vector_size));
+
+    // finally, reinterpret the char* buffer as a size_t and store the value in vector_size
+    vector_size = *reinterpret_cast<size_t*>(buffer);
+
+    // Clear the old points, and reserve enough space for the points to be loaded
+    drawPoints->clear();
+    drawPoints->reserve(vector_size);
+
+    // Delete the buffer.
+    delete buffer;
+
+    // allocate a new buffer to hold the x and y values
+    buffer = new char[sizeof(x)];
+
+    // read the points
+    for(i = 0; i < vector_size; i++) {
+
+        // Read into the buffer the value of x
+        file_stream.read(buffer, sizeof(buffer));
+
+        // Reinterpret the buffer as an int and store the value in x
+        x = *reinterpret_cast<int*>(buffer);
+
+        // Read into the buffer the value of y
+        file_stream.read(buffer, sizeof(buffer));
+
+        // Reinrerpret the buffer as an int and store the value in y
+        y = *reinterpret_cast<int*>(buffer);
+
+        // Finally, recreate the point from the X and Y values and push it onto the drawpoints vector
+        drawPoints->push_back(wxPoint(x, y));
+    }
+
+    delete buffer;
 }
 
 void ClickAndDrawFrame::OnSavePointsFilePickerFileChanged(wxFileDirPickerEvent& event)
 {
     writePointsToFile(event.GetPath().ToStdString());
+}
+
+void ClickAndDrawFrame::OnLoadPointsFilePickerFileChanged(wxFileDirPickerEvent& event)
+{
+    readPointsFromFile(event.GetPath().ToStdString());
 }

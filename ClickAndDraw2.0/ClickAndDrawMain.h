@@ -46,6 +46,7 @@ class ClickAndDrawFrame: public wxFrame
         void changeMode(Modes NewMode);
         const std::string add_ext(const std::string path, const std::string ext);
         void writePointsToFile(std::string file);
+        void readPointsFromFile(std::string file);
 
         //(*Handlers(ClickAndDrawFrame)
         void OnQuit(wxCommandEvent& event);
@@ -55,6 +56,7 @@ class ClickAndDrawFrame: public wxFrame
         void OnDrawPanelPaint(wxPaintEvent& event);
         void OnFilePickerFileChanged(wxFileDirPickerEvent& event);
         void OnSavePointsFilePickerFileChanged(wxFileDirPickerEvent& event);
+        void OnLoadPointsFilePickerFileChanged(wxFileDirPickerEvent& event);
         //*)
 
         //(*Identifiers(ClickAndDrawFrame)
@@ -82,7 +84,7 @@ class ClickAndDrawFrame: public wxFrame
         wxColourPickerCtrl* ColorPicker;
         wxStaticText* StaticText2;
         wxChoice* ThicknessPicker;
-        wxFilePickerCtrl* FilePickerCtrl1;
+        wxFilePickerCtrl* LoadPointsFilePicker;
         //*)
 
         DECLARE_EVENT_TABLE()
