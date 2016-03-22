@@ -40,6 +40,17 @@ class ClickAndDrawFrame: public wxFrame
             DrawMode
         } mode;
 
+        struct file_header {
+            int thickness;
+            uint32_t color;
+            size_t vector_size;
+        };
+
+        struct light_point {
+            int x;
+            int y;
+        };
+
         wxPen* pen;
         wxBitmap* bitmap;
 

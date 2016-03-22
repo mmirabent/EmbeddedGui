@@ -1337,7 +1337,7 @@
 1457014555 /home/marcos/EmbeddedGui/ClickAndDraw2.0/ClickAndDrawApp.h
 	<wx/app.h>
 
-1457801454 /home/marcos/EmbeddedGui/ClickAndDraw2.0/ClickAndDrawMain.h
+1458658029 /home/marcos/EmbeddedGui/ClickAndDraw2.0/ClickAndDrawMain.h
 	<vector>
 	<string>
 	<wx/sizer.h>
@@ -1350,11 +1350,13 @@
 	<wx/clrpicker.h>
 	<wx/choice.h>
 
-1458657435 source:/home/marcos/EmbeddedGui/ClickAndDraw2.0/ClickAndDrawMain.cpp
+1458663336 source:/home/marcos/EmbeddedGui/ClickAndDraw2.0/ClickAndDrawMain.cpp
 	"ClickAndDrawMain.h"
 	<wx/msgdlg.h>
 	<iostream>
 	<fstream>
+	<cstdio>
+	<cstdlib>
 	<wx/dcclient.h>
 	<wx/dcmemory.h>
 	<wx/dc.h>

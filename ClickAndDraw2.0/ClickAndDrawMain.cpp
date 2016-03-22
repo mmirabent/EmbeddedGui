@@ -11,6 +11,8 @@
 #include <wx/msgdlg.h>
 #include <iostream>
 #include <fstream>
+#include <cstdio>
+#include <cstdlib>
 #include <wx/dcclient.h>
 #include <wx/dcmemory.h>
 #include <wx/dc.h>
@@ -347,81 +349,93 @@ const std::string ClickAndDrawFrame::add_ext(const std::string path, const std::
 
 void ClickAndDrawFrame::writePointsToFile(std::string file)
 {
-    size_t vector_size;
-    char* buffer;
+    // These structs will be loaded with data to write to the file
+    struct file_header header;
+    struct light_point point;
 
-    vector_size = drawPoints->size();
+    // Open the file for writing in binary mode
+    std::FILE* f = std::fopen(file.c_str(), "wb");
 
-    std::fstream file_stream(file, std::ios::binary | std::ios::out);
+    // Check if the file opened correctly, else print an error message and return
+    // TODO: Popup a dialog for this
+    if(!f) {
+        std::perror("Failed to open file");
+        return;
+    }
 
-    buffer = reinterpret_cast<char*>(&vector_size);
+    // Get the data to pack into the header struct
+    int thickness = wxAtoi(ThicknessPicker->GetString(ThicknessPicker->GetSelection()));
+    uint32_t color = ColorPicker->GetColour().GetRGB();
+    size_t vector_size = drawPoints->size();
 
-    file_stream.write(buffer, sizeof(vector_size));
+    // Make the header struct from the data we got earlier
+    header.thickness = thickness;
+    header.color = color;
+    header.vector_size = vector_size;
+
+    // Write the header struct to the head of the file
+    std::fwrite(&header, sizeof(file_header),1,f);
+
 
     for(wxPoint& p : *drawPoints) {
-        buffer = reinterpret_cast<char*>(&p.x);
-        file_stream.write(buffer, sizeof(p.x));
-
-        buffer = reinterpret_cast<char*>(&p.y);
-        file_stream.write(buffer, sizeof(p.y));
+        point.x = p.x;
+        point.y = p.y;
+        std::fwrite(&point, sizeof(light_point),1,f);
     }
-    file_stream.close();
+
+    // Close the door on your way out
+    std::fclose(f);
 }
 
 void ClickAndDrawFrame::readPointsFromFile(std::string file)
 {
-    // variables to hold the binary data read in from the file
-    size_t vector_size;
-    size_t i;
-    int x, y;
-    char* buffer;
+    // These structs will contain the data read back from the file
+    struct file_header header;
+    struct light_point point;
 
-    // Open the file in binary and "in" mode
-    std::fstream file_stream(file, std::ios::binary | std::ios::in);
+    // Open up the file for reading in binary mode
+    std::FILE* f = std::fopen(file.c_str(),"rb");
 
-    // read in the vector_size, first create the buffer.
-    buffer = new char[sizeof(vector_size)];
-
-    // then load the buffer with the read method
-    file_stream.read(buffer, sizeof(vector_size));
-
-    // finally, reinterpret the char* buffer as a size_t and store the value in vector_size
-    vector_size = *reinterpret_cast<size_t*>(buffer);
-
-    std::cout << "Vector size is: " << vector_size << std::endl;
-
-    // Clear the old points, and reserve enough space for the points to be loaded
-    drawPoints->clear();
-    drawPoints->reserve(vector_size);
-
-    // Delete the buffer.
-    delete buffer;
-
-    // allocate a new buffer to hold the x and y values
-    buffer = new char[sizeof(x)];
-
-    // read the points
-    for(i = 0; i < vector_size; i++) {
-
-        // Read into the buffer the value of x
-        file_stream.read(buffer, sizeof(int));
-
-        // Reinterpret the buffer as an int and store the value in x
-        x = *reinterpret_cast<int*>(buffer);
-
-        // Read into the buffer the value of y
-        file_stream.read(buffer, sizeof(int));
-
-        // Reinrerpret the buffer as an int and store the value in y
-        y = *reinterpret_cast<int*>(buffer);
-
-        // Finally, recreate the point from the X and Y values and push it onto the drawpoints vector
-        std::cout << "Point " << i << " is x: " << x << " y: " << y << std::endl;
-
-        drawPoints->push_back(wxPoint(x, y));
+    // Check if the file opened correctly, else print an error message and return
+    // TODO: Popup a dialog for this
+    if(!f) {
+        std::perror("Failed to open file");
+        return;
     }
 
-    delete buffer;
+    // Read the header data back from the file
+    std::fread(&header, sizeof(file_header), 1, f);
+
+    // Set up the drawPoints vector
+    drawPoints->clear();
+    drawPoints->reserve(header.vector_size);
+
+    // Set the thickness picker. This happens in three steps
+    std::string thicknessString = std::to_string(header.thickness); // First, convert the int to a string
+    int choice = ThicknessPicker->FindString(thicknessString); // Then find that string, this returns an index
+    ThicknessPicker->SetSelection(choice); // Finally, use the index to set the selection
+
+    // Set the color picker color
+    wxColor *color = new wxColor();
+    color->SetRGB(header.color);
+    ColorPicker->SetColour(*color);
+
+    // Read in the points, loading them into light_point structs and using that to construct new wxPoints
+    // Finally, push the new wxPoints back onto the vector
+    for(unsigned int i = 0; i < header.vector_size; i++)
+    {
+        wxPoint* p = new wxPoint();
+
+        std::fread(&point, sizeof(light_point),1,f);
+
+        p->x = point.x;
+        p->y = point.y;
+
+        drawPoints->push_back(*p);
+    }
+
+    // Don't forget to close the file when you're done.
+    std::fclose(f);
 }
 
 void ClickAndDrawFrame::OnSavePointsFilePickerFileChanged(wxFileDirPickerEvent& event)
