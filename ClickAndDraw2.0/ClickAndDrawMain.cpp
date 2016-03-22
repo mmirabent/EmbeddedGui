@@ -261,6 +261,8 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
         ColorPicker->Enable();
         ThicknessPicker->Enable();
         BitmapFilePicker->Disable();
+        SavePointsFilePicker->Disable(); // There is nothing to save yet
+        LoadPointsFilePicker->Enable();
 
         // Refresh the draw panel
         DrawPanel->Refresh();
@@ -274,6 +276,8 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
         ColorPicker->Disable();
         ThicknessPicker->Disable();
         BitmapFilePicker->Disable();
+        SavePointsFilePicker->Disable();
+        LoadPointsFilePicker->Disable();
 
         // Update the status bar
         StatusBar1->SetStatusText(wxT("Drawing Mode"));
@@ -290,6 +294,7 @@ void ClickAndDrawFrame::changeMode(Modes NewMode)
         DrawPanel->Refresh();
 
         BitmapFilePicker->Enable();
+        SavePointsFilePicker->Enable();
 
         StatusBar1->SetStatusText(wxT("Viewing Mode"));
         break;
@@ -383,6 +388,8 @@ void ClickAndDrawFrame::readPointsFromFile(std::string file)
     // finally, reinterpret the char* buffer as a size_t and store the value in vector_size
     vector_size = *reinterpret_cast<size_t*>(buffer);
 
+    std::cout << "Vector size is: " << vector_size << std::endl;
+
     // Clear the old points, and reserve enough space for the points to be loaded
     drawPoints->clear();
     drawPoints->reserve(vector_size);
@@ -397,18 +404,20 @@ void ClickAndDrawFrame::readPointsFromFile(std::string file)
     for(i = 0; i < vector_size; i++) {
 
         // Read into the buffer the value of x
-        file_stream.read(buffer, sizeof(buffer));
+        file_stream.read(buffer, sizeof(int));
 
         // Reinterpret the buffer as an int and store the value in x
         x = *reinterpret_cast<int*>(buffer);
 
         // Read into the buffer the value of y
-        file_stream.read(buffer, sizeof(buffer));
+        file_stream.read(buffer, sizeof(int));
 
         // Reinrerpret the buffer as an int and store the value in y
         y = *reinterpret_cast<int*>(buffer);
 
         // Finally, recreate the point from the X and Y values and push it onto the drawpoints vector
+        std::cout << "Point " << i << " is x: " << x << " y: " << y << std::endl;
+
         drawPoints->push_back(wxPoint(x, y));
     }
 
@@ -417,7 +426,8 @@ void ClickAndDrawFrame::readPointsFromFile(std::string file)
 
 void ClickAndDrawFrame::OnSavePointsFilePickerFileChanged(wxFileDirPickerEvent& event)
 {
-    writePointsToFile(event.GetPath().ToStdString());
+    std::string file = add_ext(event.GetPath().ToStdString(),"dd");
+    writePointsToFile(file);
 }
 
 void ClickAndDrawFrame::OnLoadPointsFilePickerFileChanged(wxFileDirPickerEvent& event)
