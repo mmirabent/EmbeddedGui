@@ -10,6 +10,7 @@
 #include "url_searchMain.h"
 #include <wx/msgdlg.h>
 #include <wx/textfile.h>
+#include <wx/protocol/http.h>
 #include <iostream>
 
 //(*InternalHeaders(url_searchFrame)
@@ -138,6 +139,8 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     std::vector<wxURL> urls;
     std::vector<std::string> terms;
 
+    wxHTTP http;
+
     wxString urls_file = URLFilePickerCtrl->GetPath();
     wxString terms_file = SearchFilePickerCtrl->GetPath();
 
@@ -148,6 +151,8 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     readSearchTermsFromFile(terms_file,terms);
 
     for(wxURL& url : urls) {
+            http.Connect(url.GetServer());
+
             std::cout << "Searching " << url.GetURL().ToStdString() << std::endl;
         for(std::string& str : terms) {
             std::cout << "Searching for: " << str << std::endl;
@@ -165,7 +170,8 @@ void url_searchFrame::readURLsFromFile(const wxString& path, std::vector<wxURL>&
 
     for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
             wxURL url(str);
-            urls.push_back(url);
+            if(url.IsOk())
+                urls.push_back(url);
     }
 
     file.Close();
