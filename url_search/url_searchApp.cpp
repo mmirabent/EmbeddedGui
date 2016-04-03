@@ -14,7 +14,7 @@
 #include <wx/image.h>
 //*)
 
-IMPLEMENT_APP(url_searchApp);
+IMPLEMENT_APP(url_searchApp)
 
 bool url_searchApp::OnInit()
 {

@@ -61,6 +61,7 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_BUTTON1" variable="StartButton" member="yes">
 							<label>Start</label>
+							<handler function="OnStartButtonClick" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxEXPAND</flag>
 						<border>5</border>

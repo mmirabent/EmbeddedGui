@@ -10,6 +10,10 @@
 #ifndef URL_SEARCHMAIN_H
 #define URL_SEARCHMAIN_H
 
+#include<vector>
+#include<string>
+#include<wx/url.h>
+
 //(*Headers(url_searchFrame)
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -30,9 +34,13 @@ class url_searchFrame: public wxFrame
 
     private:
 
+        void readURLsFromFile(const wxString& path, std::vector<wxURL>& urls);
+        void readSearchTermsFromFile(const wxString& path, std::vector<std::string>& urls);
+
         //(*Handlers(url_searchFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnStartButtonClick(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(url_searchFrame)

@@ -9,6 +9,8 @@
 
 #include "url_searchMain.h"
 #include <wx/msgdlg.h>
+#include <wx/textfile.h>
+#include <iostream>
 
 //(*InternalHeaders(url_searchFrame)
 #include <wx/string.h>
@@ -56,7 +58,7 @@ BEGIN_EVENT_TABLE(url_searchFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID id)
+url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
 {
     //(*Initialize(url_searchFrame)
     wxMenuItem* MenuItem2;
@@ -108,6 +110,7 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->Fit(this);
     BoxSizer1->SetSizeHints(this);
 
+    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&url_searchFrame::OnStartButtonClick);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&url_searchFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&url_searchFrame::OnAbout);
     //*)
@@ -119,13 +122,60 @@ url_searchFrame::~url_searchFrame()
     //*)
 }
 
-void url_searchFrame::OnQuit(wxCommandEvent& event)
+void url_searchFrame::OnQuit(wxCommandEvent&)
 {
     Close();
 }
 
-void url_searchFrame::OnAbout(wxCommandEvent& event)
+void url_searchFrame::OnAbout(wxCommandEvent&)
 {
     wxString msg = wxbuildinfo(long_f);
     wxMessageBox(msg, _("Welcome to..."));
+}
+
+void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
+{
+    std::vector<wxURL> urls;
+    std::vector<std::string> terms;
+
+    wxString urls_file = URLFilePickerCtrl->GetPath();
+    wxString terms_file = SearchFilePickerCtrl->GetPath();
+
+    readURLsFromFile(urls_file,urls);
+    readSearchTermsFromFile(terms_file,terms);
+
+    for(wxURL& url : urls) {
+            std::cout << "Searching " << url.GetURL().ToStdString() << std::endl;
+        for(std::string& str : terms) {
+            std::cout << "Searching for: " << str << std::endl;
+        }
+    }
+}
+
+void url_searchFrame::readURLsFromFile(const wxString& path, std::vector<wxURL>& urls)
+{
+    wxTextFile file(path);
+    wxString str;
+
+    file.Open();
+
+    for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
+            wxURL url(str);
+            urls.push_back(url);
+    }
+    file.Close();
+}
+
+void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<std::string>& terms)
+{
+    wxTextFile file(path);
+    wxString str;
+
+    file.Open();
+
+    for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
+            terms.push_back(str.ToStdString());
+    }
+
+    file.Close();
 }
