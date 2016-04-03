@@ -36,6 +36,7 @@ class url_searchFrame: public wxFrame
 
         void readURLsFromFile(const wxString& path, std::vector<wxURL>& urls);
         void readSearchTermsFromFile(const wxString& path, std::vector<std::string>& urls);
+        int countSubstringsInString(const std::string& sub, const std::string& str);
 
         //(*Handlers(url_searchFrame)
         void OnQuit(wxCommandEvent& event);

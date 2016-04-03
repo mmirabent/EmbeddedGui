@@ -10,6 +10,7 @@
 #include "url_searchMain.h"
 #include <wx/msgdlg.h>
 #include <wx/textfile.h>
+#include <wx/sstream.h>
 #include <wx/protocol/http.h>
 #include <iostream>
 
@@ -151,11 +152,31 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     readSearchTermsFromFile(terms_file,terms);
 
     for(wxURL& url : urls) {
-            http.Connect(url.GetServer());
 
-            std::cout << "Searching " << url.GetURL().ToStdString() << std::endl;
-        for(std::string& str : terms) {
-            std::cout << "Searching for: " << str << std::endl;
+        // If the url is missing a path, check the root path
+        wxString path;
+        if(url.GetPath().IsEmpty()) {
+            path = "/";
+        } else {
+            path = url.GetPath();
+        }
+
+        // Create the connection
+        while(!http.Connect(url.GetServer()))
+            wxSleep(500);
+
+        // Actually perform the get request and load the response into get
+        wxInputStream* stream = http.GetInputStream(url.GetPath());
+
+        if(http.GetError() == wxPROTO_NOERR) {
+
+            wxString body;
+            wxStringOutputStream out_stream(&body);
+            stream->Read(out_stream);
+
+            for(std::string& str : terms) {
+                std::cout << "Searching for: " << str << std::endl;
+            }
         }
     }
 }
@@ -190,4 +211,10 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<
     }
 
     file.Close();
+}
+
+int url_searchFrame::countSubstringsInString(const std::string& sub, const std::string& str)
+{
+
+    return 0;
 }
