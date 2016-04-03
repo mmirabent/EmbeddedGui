@@ -1,3 +1,0 @@
-bars 1
-two bars
-bar III
