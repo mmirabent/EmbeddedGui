@@ -141,6 +141,9 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     wxString urls_file = URLFilePickerCtrl->GetPath();
     wxString terms_file = SearchFilePickerCtrl->GetPath();
 
+    if(urls_file.empty() || terms_file.empty())
+        return; // TODO: Notify the user that they need to select a file
+
     readURLsFromFile(urls_file,urls);
     readSearchTermsFromFile(terms_file,terms);
 
@@ -157,12 +160,14 @@ void url_searchFrame::readURLsFromFile(const wxString& path, std::vector<wxURL>&
     wxTextFile file(path);
     wxString str;
 
-    file.Open();
+    if(!file.Open())
+        return; // Something terrible has happened
 
     for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
             wxURL url(str);
             urls.push_back(url);
     }
+
     file.Close();
 }
 
@@ -171,7 +176,8 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<
     wxTextFile file(path);
     wxString str;
 
-    file.Open();
+    if(!file.Open())
+        return; // Something terrible has happened
 
     for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
             terms.push_back(str.ToStdString());
