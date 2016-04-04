@@ -5,7 +5,6 @@
 		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 			<object class="sizeritem">
 				<object class="wxTextCtrl" name="ID_TEXTCTRL1" variable="OutputTextCtrl" member="yes">
-					<value>Text</value>
 					<style>wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL|wxHSCROLL</style>
 				</object>
 				<flag>wxALL|wxEXPAND</flag>

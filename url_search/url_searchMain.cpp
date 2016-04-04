@@ -76,7 +76,7 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
 
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-    OutputTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL1, _("Text"), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+    OutputTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_TEXTCTRL1"));
     BoxSizer1->Add(OutputTextCtrl, 1, wxALL|wxEXPAND, 5);
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
     FlexGridSizer1 = new wxFlexGridSizer(3, 2, 0, 0);
@@ -170,14 +170,19 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
 
         if(http.GetError() == wxPROTO_NOERR) {
 
+            *OutputTextCtrl << wxT("Site: ") << url.GetServer() << path << wxT("\n");
+
             wxString body;
             wxStringOutputStream out_stream(&body);
             stream->Read(out_stream);
 
-            for(std::string& str : terms) {
-                std::cout << "Searching for: " << str << std::endl;
+            std::cout << url.GetServer().ToStdString() << "\n" << body.ToStdString() << "\n";
+
+            for(std::string& term : terms) {
+                *OutputTextCtrl << term << wxT(": ") << countSubstringsInString(term,body.ToStdString()) << wxT("\n");
             }
         }
+        delete stream;
     }
 }
 
@@ -215,6 +220,13 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<
 
 int url_searchFrame::countSubstringsInString(const std::string& sub, const std::string& str)
 {
+    int hit_count;
+    size_t pos = 0;
 
-    return 0;
+    while((pos = str.find(sub,pos)) != std::string::npos) {
+        pos += sub.length();
+        hit_count++;
+    }
+
+    return hit_count;
 }
