@@ -11,7 +11,7 @@
 #include <wx/msgdlg.h>
 #include <wx/textfile.h>
 #include <wx/sstream.h>
-#include <wx/protocol/http.h>
+#include <wx/url.h>
 #include <iostream>
 
 //(*InternalHeaders(url_searchFrame)
@@ -140,8 +140,6 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     std::vector<wxURL> urls;
     std::vector<std::string> terms;
 
-    wxHTTP http;
-
     wxString urls_file = URLFilePickerCtrl->GetPath();
     wxString terms_file = SearchFilePickerCtrl->GetPath();
 
@@ -153,24 +151,12 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
 
     for(wxURL& url : urls) {
 
-        // If the url is missing a path, check the root path
-        wxString path;
-        if(url.GetPath().IsEmpty()) {
-            path = "/";
-        } else {
-            path = url.GetPath();
-        }
-
-        // Create the connection
-        while(!http.Connect(url.GetServer()))
-            wxSleep(500);
-
         // Actually perform the get request and load the response into get
-        wxInputStream* stream = http.GetInputStream(url.GetPath());
+        wxInputStream* stream = url.GetInputStream();
 
-        if(http.GetError() == wxPROTO_NOERR) {
+        if(url.GetError() == wxURL_NOERR) {
 
-            *OutputTextCtrl << wxT("Site: ") << url.GetServer() << path << wxT("\n");
+            *OutputTextCtrl << wxT("\nSite: ") << url.GetServer() << url.GetPath() << wxT("\n");
 
             wxString body;
             wxStringOutputStream out_stream(&body);
