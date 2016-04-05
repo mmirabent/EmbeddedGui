@@ -13,6 +13,8 @@
 #include <wx/sstream.h>
 #include <wx/url.h>
 #include <iostream>
+#include <algorithm>
+#include <string>
 
 //(*InternalHeaders(url_searchFrame)
 #include <wx/string.h>
@@ -156,7 +158,7 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
 
         if(url.GetError() == wxURL_NOERR) {
 
-            *OutputTextCtrl << wxT("\nSite: ") << url.GetServer() << url.GetPath() << wxT("\n");
+            *OutputTextCtrl << wxT("Site: ") << url.GetServer() << url.GetPath() << wxT("\n");
 
             wxString body;
             wxStringOutputStream out_stream(&body);
@@ -165,8 +167,11 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
             std::cout << url.GetServer().ToStdString() << "\n" << body.ToStdString() << "\n";
 
             for(std::string& term : terms) {
-                *OutputTextCtrl << term << wxT(": ") << countSubstringsInString(term,body.ToStdString()) << wxT("\n");
+                std::transform(term.begin(), term.end(), term.begin(), ::tolower);
+                *OutputTextCtrl << term << wxT(": ") << countSubstringsInString(term,body.Lower().ToStdString()) << wxT("\n");
             }
+
+            *OutputTextCtrl << wxT("\n");
         }
         delete stream;
     }
