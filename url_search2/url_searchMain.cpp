@@ -126,7 +126,6 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
     output = new std::string();
     thread = nullptr;
     timer = new wxTimer(this);
-    timer->Start(100);
 
     results_mq = new wxMessageQueue<URLSearchRecord>();
     url_mq = new wxMessageQueue<wxURL>();
@@ -175,6 +174,7 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
 
     thread = new URLThread(*terms, url_mq, results_mq);
     thread->Run();
+    timer->Start(100);
     StartButton->Disable();
 }
 
