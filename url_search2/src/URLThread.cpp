@@ -10,7 +10,8 @@
 URLThread::URLThread(const std::vector<std::string>& terms, wxMessageQueue<wxURL>* urls, wxMessageQueue<URLSearchRecord>* results_mq) :
     terms(terms),
     urls(urls),
-    results_mq(results_mq)
+    results_mq(results_mq),
+    idle(false)
 {
 
 }
@@ -41,7 +42,13 @@ wxThread::ExitCode URLThread::Entry()
 
     while(true)
     {
-        urls->Receive(url);
+        if(urls->ReceiveTimeout(100,url) == wxMSGQUEUE_TIMEOUT)
+        {
+            idle = true;
+            continue;
+        }
+
+        idle = false;
 
         // Actually perform the get request and load the response into get
         wxInputStream* stream = url.GetInputStream();

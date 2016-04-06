@@ -14,6 +14,7 @@ class URLThread : public wxThread
     public:
         URLThread(const std::vector<std::string>& terms, wxMessageQueue<wxURL>* urls, wxMessageQueue<URLSearchRecord>* results_mq);
         virtual ~URLThread();
+        bool isIdle();
 
     protected:
         virtual ExitCode Entry();
@@ -24,6 +25,7 @@ class URLThread : public wxThread
         std::vector<std::string> terms;
         wxMessageQueue<wxURL>* urls;
         wxMessageQueue<URLSearchRecord>* results_mq;
+        bool idle;
 };
 
 #endif // URLTHREAD_H
