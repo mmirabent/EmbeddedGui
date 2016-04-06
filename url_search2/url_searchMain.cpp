@@ -129,6 +129,7 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
     timer->Start(100);
 
     results_mq = new wxMessageQueue<URLSearchRecord>();
+    url_mq = new wxMessageQueue<wxURL>();
 }
 
 url_searchFrame::~url_searchFrame()
@@ -162,7 +163,11 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     readURLsFromFile(urls_file,*urls);
     readSearchTermsFromFile(terms_file,*terms);
 
-    thread = new URLThread(*urls, *terms, results_mq);
+    for(wxURL& url : *urls) {
+        url_mq->Post(url);
+    }
+
+    thread = new URLThread(*terms, url_mq, results_mq);
     thread->Run();
 
 }

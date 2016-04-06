@@ -7,7 +7,7 @@
 #include <wx/sstream.h>
 
 
-URLThread::URLThread(const std::vector<wxURL>& urls, const std::vector<std::string>& terms, wxMessageQueue<URLSearchRecord>* results_mq) :
+URLThread::URLThread(const std::vector<std::string>& terms, wxMessageQueue<wxURL>* urls, wxMessageQueue<URLSearchRecord>* results_mq) :
     terms(terms),
     urls(urls),
     results_mq(results_mq)
@@ -37,9 +37,11 @@ int URLThread::countSubstringsInString(const std::string& sub, const std::string
 wxThread::ExitCode URLThread::Entry()
 {
     std::stringstream str_stream;
+    wxURL url;
 
-    for(wxURL& url : urls)
+    while(true)
     {
+        urls->Receive(url);
 
         // Actually perform the get request and load the response into get
         wxInputStream* stream = url.GetInputStream();
@@ -61,6 +63,7 @@ wxThread::ExitCode URLThread::Entry()
 
             results_mq->Post(result);
         }
+        delete stream;
     }
 
     return (wxThread::ExitCode)0;

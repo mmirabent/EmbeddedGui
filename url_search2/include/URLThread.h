@@ -12,7 +12,7 @@
 class URLThread : public wxThread
 {
     public:
-        URLThread(const std::vector<wxURL>& urls, const std::vector<std::string>& terms, wxMessageQueue<URLSearchRecord>* results_mq);
+        URLThread(const std::vector<std::string>& terms, wxMessageQueue<wxURL>* urls, wxMessageQueue<URLSearchRecord>* results_mq);
         virtual ~URLThread();
 
     protected:
@@ -22,7 +22,7 @@ class URLThread : public wxThread
         int countSubstringsInString(const std::string& sub, const std::string& str);
         std::string** output;
         std::vector<std::string> terms;
-        std::vector<wxURL> urls;
+        wxMessageQueue<wxURL>* urls;
         wxMessageQueue<URLSearchRecord>* results_mq;
 };
 

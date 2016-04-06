@@ -48,6 +48,7 @@ class url_searchFrame: public wxFrame
         std::vector<std::string>* terms;
 
         wxMessageQueue<URLSearchRecord>* results_mq;
+        wxMessageQueue<wxURL>* url_mq;
 
         void OnTimerTick(wxTimerEvent& event);
 
