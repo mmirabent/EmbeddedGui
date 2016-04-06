@@ -127,6 +127,8 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
     thread = nullptr;
     timer = new wxTimer(this);
     timer->Start(100);
+
+    results_mq = new wxMessageQueue<URLSearchRecord>();
 }
 
 url_searchFrame::~url_searchFrame()
@@ -160,7 +162,7 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     readURLsFromFile(urls_file,*urls);
     readSearchTermsFromFile(terms_file,*terms);
 
-    thread = new URLThread(*urls, *terms, &output);
+    thread = new URLThread(*urls, *terms, results_mq);
     thread->Run();
 
 }
@@ -216,5 +218,7 @@ int url_searchFrame::countSubstringsInString(const std::string& sub, const std::
 
 void url_searchFrame::OnTimerTick(wxTimerEvent&)
 {
-    OutputTextCtrl->SetValue(wxString(*output));
+    URLSearchRecord result;
+    if(results_mq->ReceiveTimeout(50,result) == wxMSGQUEUE_NO_ERROR)
+        *OutputTextCtrl << wxString(result.toString());
 }

@@ -5,12 +5,14 @@
 #include <string>
 #include <vector>
 #include <wx/url.h>
+#include <wx/msgqueue.h>
+#include "URLSearchRecord.h"
 
 
 class URLThread : public wxThread
 {
     public:
-        URLThread(const std::vector<wxURL>& urls, const std::vector<std::string>& terms, std::string** out);
+        URLThread(const std::vector<wxURL>& urls, const std::vector<std::string>& terms, wxMessageQueue<URLSearchRecord>* results_mq);
         virtual ~URLThread();
 
     protected:
@@ -19,8 +21,9 @@ class URLThread : public wxThread
     private:
         int countSubstringsInString(const std::string& sub, const std::string& str);
         std::string** output;
-        std::vector<wxURL> urls;
         std::vector<std::string> terms;
+        std::vector<wxURL> urls;
+        wxMessageQueue<URLSearchRecord>* results_mq;
 };
 
 #endif // URLTHREAD_H
