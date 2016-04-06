@@ -19,6 +19,7 @@
 #include <wx/msgqueue.h>
 
 //(*Headers(url_searchFrame)
+#include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/menu.h>
@@ -61,13 +62,17 @@ class url_searchFrame: public wxFrame
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
         void OnStartButtonClick(wxCommandEvent& event);
+        void OnStopButtonClick(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(url_searchFrame)
         static const long ID_TEXTCTRL1;
         static const long ID_FILEPICKERCTRL1;
         static const long ID_FILEPICKERCTRL2;
+        static const long ID_SPINCTRL1;
+        static const long ID_STATICTEXT1;
         static const long ID_BUTTON1;
+        static const long ID_BUTTON2;
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
@@ -75,10 +80,13 @@ class url_searchFrame: public wxFrame
 
         //(*Declarations(url_searchFrame)
         wxTextCtrl* OutputTextCtrl;
+        wxButton* StopButton;
         wxStatusBar* StatusBar1;
         wxFilePickerCtrl* URLFilePickerCtrl;
         wxFilePickerCtrl* SearchFilePickerCtrl;
         wxButton* StartButton;
+        wxStaticText* StaticText3;
+        wxSpinCtrl* ThreadSpinCtrl;
         //*)
 
         DECLARE_EVENT_TABLE()

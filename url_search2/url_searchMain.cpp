@@ -54,7 +54,10 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 const long url_searchFrame::ID_TEXTCTRL1 = wxNewId();
 const long url_searchFrame::ID_FILEPICKERCTRL1 = wxNewId();
 const long url_searchFrame::ID_FILEPICKERCTRL2 = wxNewId();
+const long url_searchFrame::ID_SPINCTRL1 = wxNewId();
+const long url_searchFrame::ID_STATICTEXT1 = wxNewId();
 const long url_searchFrame::ID_BUTTON1 = wxNewId();
+const long url_searchFrame::ID_BUTTON2 = wxNewId();
 const long url_searchFrame::idMenuQuit = wxNewId();
 const long url_searchFrame::idMenuAbout = wxNewId();
 const long url_searchFrame::ID_STATUSBAR1 = wxNewId();
@@ -73,6 +76,7 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
     wxMenuItem* MenuItem2;
     wxMenuItem* MenuItem1;
     wxFlexGridSizer* FlexGridSizer1;
+    wxBoxSizer* BoxSizer3;
     wxMenu* Menu1;
     wxBoxSizer* BoxSizer2;
     wxStaticText* StaticText1;
@@ -84,6 +88,7 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
     Create(parent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("wxID_ANY"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     OutputTextCtrl = new wxTextCtrl(this, ID_TEXTCTRL1, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxVSCROLL|wxHSCROLL, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+    OutputTextCtrl->SetMinSize(wxSize(300,500));
     BoxSizer1->Add(OutputTextCtrl, 1, wxALL|wxEXPAND, 5);
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
     FlexGridSizer1 = new wxFlexGridSizer(3, 2, 0, 0);
@@ -95,9 +100,18 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
     FlexGridSizer1->Add(StaticText2, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
     SearchFilePickerCtrl = new wxFilePickerCtrl(this, ID_FILEPICKERCTRL2, wxEmptyString, wxEmptyString, _T("*.txt"), wxDefaultPosition, wxDefaultSize, wxFLP_FILE_MUST_EXIST|wxFLP_OPEN, wxDefaultValidator, _T("ID_FILEPICKERCTRL2"));
     FlexGridSizer1->Add(SearchFilePickerCtrl, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    BoxSizer2->Add(FlexGridSizer1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer2->Add(FlexGridSizer1, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    ThreadSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL1, _T("1"), wxDefaultPosition, wxDefaultSize, 0, 1, 10, 1, _T("ID_SPINCTRL1"));
+    ThreadSpinCtrl->SetValue(_T("1"));
+    BoxSizer2->Add(ThreadSpinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    StaticText3 = new wxStaticText(this, ID_STATICTEXT1, _("Threads"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+    BoxSizer2->Add(StaticText3, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
     StartButton = new wxButton(this, ID_BUTTON1, _("Start"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
-    BoxSizer2->Add(StartButton, 0, wxALL|wxEXPAND, 5);
+    BoxSizer3->Add(StartButton, 0, wxALL|wxEXPAND, 5);
+    StopButton = new wxButton(this, ID_BUTTON2, _("Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+    BoxSizer3->Add(StopButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    BoxSizer2->Add(BoxSizer3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer1->Add(BoxSizer2, 0, wxALL|wxALIGN_TOP, 5);
     SetSizer(BoxSizer1);
     MenuBar1 = new wxMenuBar();
@@ -120,6 +134,7 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
     BoxSizer1->SetSizeHints(this);
 
     Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&url_searchFrame::OnStartButtonClick);
+    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&url_searchFrame::OnStopButtonClick);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&url_searchFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&url_searchFrame::OnAbout);
     //*)
@@ -228,4 +243,9 @@ void url_searchFrame::OnTimerTick(wxTimerEvent&)
     }
     if(urls_done == url_size)
         StartButton->Enable();
+}
+
+void url_searchFrame::OnStopButtonClick(wxCommandEvent& event)
+{
+
 }
