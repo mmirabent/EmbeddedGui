@@ -51,6 +51,9 @@ class url_searchFrame: public wxFrame
         wxMessageQueue<URLSearchRecord>* results_mq;
         wxMessageQueue<wxURL>* url_mq;
 
+        size_t url_size;
+        size_t urls_done;
+
         void OnTimerTick(wxTimerEvent& event);
 
         //(*Handlers(url_searchFrame)

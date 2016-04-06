@@ -130,6 +130,9 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
 
     results_mq = new wxMessageQueue<URLSearchRecord>();
     url_mq = new wxMessageQueue<wxURL>();
+
+    url_size = 0;
+    urls_done = 0;
 }
 
 url_searchFrame::~url_searchFrame()
@@ -163,13 +166,16 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     readURLsFromFile(urls_file,*urls);
     readSearchTermsFromFile(terms_file,*terms);
 
-    for(wxURL& url : *urls) {
+    url_size = urls->size();
+
+    for(wxURL& url : *urls)
+    {
         url_mq->Post(url);
     }
 
     thread = new URLThread(*terms, url_mq, results_mq);
     thread->Run();
-
+    StartButton->Disable();
 }
 
 void url_searchFrame::readURLsFromFile(const wxString& path,
@@ -187,14 +193,14 @@ void url_searchFrame::readURLsFromFile(const wxString& path,
         if(url.IsOk())
             std::cout << "Pushing " << url.GetServer().ToStdString()
                       << url.GetPath().ToStdString() << "\n";
-            urls.push_back(url);
+        urls.push_back(url);
     }
 
     file.Close();
 }
 
 void url_searchFrame::readSearchTermsFromFile(const wxString& path,
-                                              std::vector<std::string>& terms)
+        std::vector<std::string>& terms)
 {
     wxTextFile file(path);
     wxString str;
@@ -214,5 +220,11 @@ void url_searchFrame::OnTimerTick(wxTimerEvent&)
 {
     URLSearchRecord result;
     if(results_mq->ReceiveTimeout(50,result) == wxMSGQUEUE_NO_ERROR)
+    {
         *OutputTextCtrl << wxString(result.toString());
+        OutputTextCtrl->MarkDirty();
+        urls_done++;
+    }
+    if(urls_done == url_size)
+        StartButton->Enable();
 }
