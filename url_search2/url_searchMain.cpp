@@ -66,7 +66,8 @@ BEGIN_EVENT_TABLE(url_searchFrame,wxFrame)
     //*)
 END_EVENT_TABLE()
 
-url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
+url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
+    threads()
 {
     //(*Initialize(url_searchFrame)
     wxMenuItem* MenuItem2;
