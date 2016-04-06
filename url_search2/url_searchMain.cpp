@@ -23,8 +23,10 @@
 //*)
 
 //helper functions
-enum wxbuildinfoformat {
-    short_f, long_f };
+enum wxbuildinfoformat
+{
+    short_f, long_f
+};
 
 wxString wxbuildinfo(wxbuildinfoformat format)
 {
@@ -59,6 +61,7 @@ const long url_searchFrame::ID_STATUSBAR1 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(url_searchFrame,wxFrame)
+    EVT_TIMER(wxID_ANY,url_searchFrame::OnTimerTick)
     //(*EventTable(url_searchFrame)
     //*)
 END_EVENT_TABLE()
@@ -122,6 +125,8 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID)
 
     output = new std::string();
     thread = nullptr;
+    timer = new wxTimer(this);
+    timer->Start(100);
 }
 
 url_searchFrame::~url_searchFrame()
@@ -143,8 +148,8 @@ void url_searchFrame::OnAbout(wxCommandEvent&)
 
 void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
 {
-    std::vector<wxURL> urls;
-    std::vector<std::string> terms;
+    urls = new std::vector<wxURL>();
+    terms = new std::vector<std::string>();
 
     wxString urls_file = URLFilePickerCtrl->GetPath();
     wxString terms_file = SearchFilePickerCtrl->GetPath();
@@ -152,10 +157,10 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     if(urls_file.empty() || terms_file.empty())
         return; // TODO: Notify the user that they need to select a file
 
-    readURLsFromFile(urls_file,urls);
-    readSearchTermsFromFile(terms_file,terms);
+    readURLsFromFile(urls_file,*urls);
+    readSearchTermsFromFile(terms_file,*terms);
 
-    thread = new URLThread(urls, terms, &output);
+    thread = new URLThread(*urls, *terms, &output);
     thread->Run();
 
 }
@@ -168,10 +173,12 @@ void url_searchFrame::readURLsFromFile(const wxString& path, std::vector<wxURL>&
     if(!file.Open())
         return; // Something terrible has happened
 
-    for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
-            wxURL url(str);
-            if(url.IsOk())
-                urls.push_back(url);
+    for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine())
+    {
+        wxURL url(str);
+        if(url.IsOk())
+            std::cout << "Pushing " << url.GetServer().ToStdString() << url.GetPath().ToStdString() << "\n";
+            urls.push_back(url);
     }
 
     file.Close();
@@ -185,8 +192,9 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<
     if(!file.Open())
         return; // Something terrible has happened
 
-    for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine()) {
-            terms.push_back(str.ToStdString());
+    for(str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine())
+    {
+        terms.push_back(str.ToStdString());
     }
 
     file.Close();
@@ -197,10 +205,16 @@ int url_searchFrame::countSubstringsInString(const std::string& sub, const std::
     int hit_count;
     size_t pos = 0;
 
-    while((pos = str.find(sub,pos)) != std::string::npos) {
+    while((pos = str.find(sub,pos)) != std::string::npos)
+    {
         pos += sub.length();
         hit_count++;
     }
 
     return hit_count;
+}
+
+void url_searchFrame::OnTimerTick(wxTimerEvent&)
+{
+    OutputTextCtrl->SetValue(wxString(*output));
 }

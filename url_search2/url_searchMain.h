@@ -11,9 +11,10 @@
 #define URL_SEARCHMAIN_H
 
 #include "URLThread.h"
-#include<vector>
-#include<string>
-#include<wx/url.h>
+#include <vector>
+#include <string>
+#include <wx/url.h>
+#include <wx/timer.h>
 
 //(*Headers(url_searchFrame)
 #include <wx/sizer.h>
@@ -40,6 +41,11 @@ class url_searchFrame: public wxFrame
         int countSubstringsInString(const std::string& sub, const std::string& str);
         std::string* output;
         URLThread* thread;
+        wxTimer* timer;
+        std::vector<wxURL>* urls;
+        std::vector<std::string>* terms;
+
+        void OnTimerTick(wxTimerEvent& event);
 
         //(*Handlers(url_searchFrame)
         void OnQuit(wxCommandEvent& event);

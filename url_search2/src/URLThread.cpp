@@ -1,4 +1,3 @@
-
 #include "URLThread.h"
 
 #include <algorithm>
@@ -26,7 +25,8 @@ int URLThread::countSubstringsInString(const std::string& sub, const std::string
     int hit_count;
     size_t pos = 0;
 
-    while((pos = str.find(sub,pos)) != std::string::npos) {
+    while((pos = str.find(sub,pos)) != std::string::npos)
+    {
         pos += sub.length();
         hit_count++;
     }
@@ -38,29 +38,41 @@ wxThread::ExitCode URLThread::Entry()
 {
     std::stringstream str_stream;
 
-    for(wxURL& url : urls) {
+    for(wxURL& url : urls)
+    {
 
         // Actually perform the get request and load the response into get
         wxInputStream* stream = url.GetInputStream();
 
-        if(url.GetError() == wxURL_NOERR) {
+        if(url.GetError() == wxURL_NOERR)
+        {
 
-            str_stream << wxT("Site: ") << url.GetServer() << url.GetPath() << wxT("\n");
+            str_stream << "Site: " << url.GetServer().ToStdString() << url.GetPath().ToStdString() << "\n";
 
-            wxString body;            wxStringOutputStream out_stream(&body);
+            wxString body;
+            wxStringOutputStream out_stream(&body);
             stream->Read(out_stream);
 
-            std::cout << url.GetServer().ToStdString() << "\n" << body.ToStdString() << "\n";
+            //std::cout << url.GetServer().ToStdString() << "\n" << body.ToStdString() << "\n";
 
-            for(std::string& term : terms) {
+            for(std::string& term : terms)
+            {
                 std::transform(term.begin(), term.end(), term.begin(), ::tolower);
-                str_stream << term << wxT(": ") << countSubstringsInString(term,body.Lower().ToStdString()) << wxT("\n");
+                str_stream << term << ": " << countSubstringsInString(term,body.Lower().ToStdString()) << "\n";
             }
 
-            str_stream << wxT("\n");
+            str_stream << "\n";
+        }
+        else
+        {
+            str_stream << "Error getting site: " << url.GetServer().ToStdString() << url.GetPath().ToStdString() << "\n";
+            str_stream << "Error code" << url.GetError() << "\n";
         }
         delete stream;
     }
 
+    str_stream << "\n\n\n********HELLO********\n\n\n";
     *output = new std::string(str_stream.str());
+
+    return (wxThread::ExitCode)0;
 }
