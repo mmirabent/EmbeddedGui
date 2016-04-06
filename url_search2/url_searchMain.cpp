@@ -172,7 +172,8 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
 
 }
 
-void url_searchFrame::readURLsFromFile(const wxString& path, std::vector<wxURL>& urls)
+void url_searchFrame::readURLsFromFile(const wxString& path,
+                                       std::vector<wxURL>& urls)
 {
     wxTextFile file(path);
     wxString str;
@@ -184,14 +185,16 @@ void url_searchFrame::readURLsFromFile(const wxString& path, std::vector<wxURL>&
     {
         wxURL url(str);
         if(url.IsOk())
-            std::cout << "Pushing " << url.GetServer().ToStdString() << url.GetPath().ToStdString() << "\n";
+            std::cout << "Pushing " << url.GetServer().ToStdString()
+                      << url.GetPath().ToStdString() << "\n";
             urls.push_back(url);
     }
 
     file.Close();
 }
 
-void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<std::string>& terms)
+void url_searchFrame::readSearchTermsFromFile(const wxString& path,
+                                              std::vector<std::string>& terms)
 {
     wxTextFile file(path);
     wxString str;
@@ -205,20 +208,6 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path, std::vector<
     }
 
     file.Close();
-}
-
-int url_searchFrame::countSubstringsInString(const std::string& sub, const std::string& str)
-{
-    int hit_count;
-    size_t pos = 0;
-
-    while((pos = str.find(sub,pos)) != std::string::npos)
-    {
-        pos += sub.length();
-        hit_count++;
-    }
-
-    return hit_count;
 }
 
 void url_searchFrame::OnTimerTick(wxTimerEvent&)

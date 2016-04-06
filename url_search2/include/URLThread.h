@@ -12,7 +12,9 @@
 class URLThread : public wxThread
 {
     public:
-        URLThread(const std::vector<std::string>& terms, wxMessageQueue<wxURL>* urls, wxMessageQueue<URLSearchRecord>* results_mq);
+        URLThread(const std::vector<std::string>& terms,
+                  wxMessageQueue<wxURL>* urls,
+                  wxMessageQueue<URLSearchRecord>* results_mq);
         virtual ~URLThread();
         bool isIdle();
 
@@ -20,7 +22,8 @@ class URLThread : public wxThread
         virtual ExitCode Entry();
 
     private:
-        int countSubstringsInString(const std::string& sub, const std::string& str);
+        int countSubstringsInString(const std::string& sub,
+                                    const std::string& str);
         std::string** output;
         std::vector<std::string> terms;
         wxMessageQueue<wxURL>* urls;

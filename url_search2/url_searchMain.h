@@ -38,9 +38,10 @@ class url_searchFrame: public wxFrame
 
     private:
 
-        void readURLsFromFile(const wxString& path, std::vector<wxURL>& urls);
-        void readSearchTermsFromFile(const wxString& path, std::vector<std::string>& urls);
-        int countSubstringsInString(const std::string& sub, const std::string& str);
+        void readURLsFromFile(const wxString& path,
+                              std::vector<wxURL>& urls);
+        void readSearchTermsFromFile(const wxString& path,
+                                     std::vector<std::string>& urls);
         std::string* output;
         URLThread* thread;
         wxTimer* timer;
