@@ -38,34 +38,35 @@ wxThread::ExitCode URLThread::Entry()
 {
     std::stringstream str_stream;
     wxURL url;
-    wxMessageQueueError error = urls->Receive(url);
+    wxMessageQueueError error;
 
-    while(error == wxMSGQUEUE_NO_ERROR)
+    while((error = urls->Receive(url)) == wxMSGQUEUE_NO_ERROR)
     {
+        URLSearchRecord result(url);
+
         if(url.GetError() == wxURL_NOERR)
         {
             // Actually perform the get request and load the response into get
             wxInputStream* stream = url.GetInputStream();
 
-            // Make the search record object to push onto the message queue later
-            URLSearchRecord result(url);
-
-            wxString body;
-            wxStringOutputStream out_stream(&body);
-            stream->Read(out_stream);
-
-            for(std::string& term : terms)
+            // Trap for young players. GetInputStream can fail and return null.
+            // This is not in the docs
+            if(stream != nullptr)
             {
-                std::transform(term.begin(), term.end(), term.begin(), ::tolower);
-                result.addSearchResult(term, countSubstringsInString(term,body.Lower().ToStdString()));
-            }
+                wxString body;
+                wxStringOutputStream out_stream(&body);
+                stream->Read(out_stream);
 
-            results_mq->Post(result);
+                for(std::string& term : terms)
+                {
+                    std::transform(term.begin(), term.end(), term.begin(), ::tolower);
+                    result.addSearchResult(term, countSubstringsInString(term,body.Lower().ToStdString()));
+                }
+            }
 
             delete stream;
         }
-
-        urls->Receive(url);
+        results_mq->Post(result);
     }
 
     return (wxThread::ExitCode)0;

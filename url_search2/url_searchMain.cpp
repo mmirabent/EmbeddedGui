@@ -143,11 +143,14 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
     thread = nullptr;
     timer = new wxTimer(this);
 
-    results_mq = new wxMessageQueue<URLSearchRecord>();
-    url_mq = new wxMessageQueue<wxURL>();
+    results_mq = nullptr;
+    url_mq = nullptr;
 
     url_size = 0;
     urls_done = 0;
+
+    StopButton->Disable();
+    StartButton->Enable();
 }
 
 url_searchFrame::~url_searchFrame()
@@ -181,17 +184,7 @@ void url_searchFrame::OnStartButtonClick(wxCommandEvent&)
     readURLsFromFile(urls_file,*urls);
     readSearchTermsFromFile(terms_file,*terms);
 
-    url_size = urls->size();
-
-    for(wxURL& url : *urls)
-    {
-        url_mq->Post(url);
-    }
-
-    thread = new URLThread(*terms, url_mq, results_mq);
-    thread->Run();
-    timer->Start(100);
-    StartButton->Disable();
+    startThreads(1);
 }
 
 void url_searchFrame::readURLsFromFile(const wxString& path,
@@ -239,13 +232,58 @@ void url_searchFrame::OnTimerTick(wxTimerEvent&)
     {
         *OutputTextCtrl << wxString(result.toString());
         OutputTextCtrl->MarkDirty();
+        std::cout << "Processing results\n";
         urls_done++;
     }
     if(urls_done == url_size)
-        StartButton->Enable();
+    {
+        stopThreads();
+    }
 }
 
-void url_searchFrame::OnStopButtonClick(wxCommandEvent& event)
+void url_searchFrame::OnStopButtonClick(wxCommandEvent&)
 {
+    stopThreads();
 
 }
+
+void url_searchFrame::startThreads(size_t)
+{
+    int i,n;
+
+    OutputTextCtrl->Clear();
+
+    results_mq = new wxMessageQueue<URLSearchRecord>();
+    url_mq = new wxMessageQueue<wxURL>();
+
+    url_size = urls->size();
+
+    for(wxURL& url : *urls)
+    {
+        url_mq->Post(url);
+    }
+
+    n = ThreadSpinCtrl->GetValue();
+
+    for(i = 0; i < n; i++)
+    {
+        URLThread* thread = new URLThread(*terms, url_mq, results_mq);
+        thread->Run();
+        threads.push_back(thread);
+    }
+
+    timer->Start(100);
+    StartButton->Disable();
+    ThreadSpinCtrl->Disable();
+    StopButton->Enable();
+}
+
+void url_searchFrame::stopThreads()
+{
+    urls_done = 0;
+    timer->Stop();
+    StartButton->Enable();
+    ThreadSpinCtrl->Enable();
+    StopButton->Disable();
+}
+
