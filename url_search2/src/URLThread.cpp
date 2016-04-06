@@ -42,11 +42,11 @@ wxThread::ExitCode URLThread::Entry()
 
     while(error == wxMSGQUEUE_NO_ERROR)
     {
-        // Actually perform the get request and load the response into get
-        wxInputStream* stream = url.GetInputStream();
-
         if(url.GetError() == wxURL_NOERR)
         {
+            // Actually perform the get request and load the response into get
+            wxInputStream* stream = url.GetInputStream();
+
             // Make the search record object to push onto the message queue later
             URLSearchRecord result(url);
 
@@ -61,8 +61,9 @@ wxThread::ExitCode URLThread::Entry()
             }
 
             results_mq->Post(result);
+
+            delete stream;
         }
-        delete stream;
 
         urls->Receive(url);
     }
