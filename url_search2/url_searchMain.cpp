@@ -203,9 +203,11 @@ void url_searchFrame::readURLsFromFile(const wxString& path,
     {
         wxURL url(str);
         if(url.IsOk())
+        {
             std::cout << "Pushing " << url.GetServer().ToStdString()
                       << url.GetPath().ToStdString() << "\n";
-        urls.push_back(url);
+            urls.push_back(url);
+        }
     }
 
     file.Close();
