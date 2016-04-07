@@ -237,6 +237,7 @@ void url_searchFrame::OnTimerTick(wxTimerEvent&)
         OutputTextCtrl->MarkDirty();
         std::cout << "Processing results\n";
         urls_done++;
+        ProgressGauge->SetValue(urls_done);
     }
     if(urls_done == url_size)
     {
@@ -260,6 +261,7 @@ void url_searchFrame::startThreads(size_t)
     url_mq = new wxMessageQueue<wxURL>();
 
     url_size = urls->size();
+    ProgressGauge->SetRange(url_size);
 
     for(wxURL& url : *urls)
     {
