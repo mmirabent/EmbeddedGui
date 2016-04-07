@@ -96,6 +96,11 @@
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 					</object>
+					<object class="sizeritem">
+						<object class="wxGauge" name="ID_GAUGE1" variable="ProgressGauge" member="yes" />
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+					</object>
 				</object>
 				<flag>wxALL|wxALIGN_TOP</flag>
 				<border>5</border>

@@ -58,6 +58,7 @@ const long url_searchFrame::ID_SPINCTRL1 = wxNewId();
 const long url_searchFrame::ID_STATICTEXT1 = wxNewId();
 const long url_searchFrame::ID_BUTTON1 = wxNewId();
 const long url_searchFrame::ID_BUTTON2 = wxNewId();
+const long url_searchFrame::ID_GAUGE1 = wxNewId();
 const long url_searchFrame::idMenuQuit = wxNewId();
 const long url_searchFrame::idMenuAbout = wxNewId();
 const long url_searchFrame::ID_STATUSBAR1 = wxNewId();
@@ -112,6 +113,8 @@ url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
     StopButton = new wxButton(this, ID_BUTTON2, _("Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
     BoxSizer3->Add(StopButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer2->Add(BoxSizer3, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+    ProgressGauge = new wxGauge(this, ID_GAUGE1, 100, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_GAUGE1"));
+    BoxSizer2->Add(ProgressGauge, 0, wxALL|wxEXPAND, 5);
     BoxSizer1->Add(BoxSizer2, 0, wxALL|wxALIGN_TOP, 5);
     SetSizer(BoxSizer1);
     MenuBar1 = new wxMenuBar();

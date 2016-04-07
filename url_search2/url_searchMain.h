@@ -19,6 +19,7 @@
 #include <wx/msgqueue.h>
 
 //(*Headers(url_searchFrame)
+#include <wx/gauge.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -75,6 +76,7 @@ class url_searchFrame: public wxFrame
         static const long ID_STATICTEXT1;
         static const long ID_BUTTON1;
         static const long ID_BUTTON2;
+        static const long ID_GAUGE1;
         static const long idMenuQuit;
         static const long idMenuAbout;
         static const long ID_STATUSBAR1;
@@ -89,6 +91,7 @@ class url_searchFrame: public wxFrame
         wxButton* StartButton;
         wxStaticText* StaticText3;
         wxSpinCtrl* ThreadSpinCtrl;
+        wxGauge* ProgressGauge;
         //*)
 
         DECLARE_EVENT_TABLE()
