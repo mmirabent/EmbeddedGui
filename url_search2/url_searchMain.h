@@ -31,6 +31,8 @@
 #include <wx/textctrl.h>
 //*)
 
+wxDECLARE_EVENT(RESULTS_POSTED_EVENT, wxCommandEvent);
+
 class url_searchFrame: public wxFrame
 {
     public:
@@ -58,6 +60,7 @@ class url_searchFrame: public wxFrame
         size_t urls_done;
 
         void OnTimerTick(wxTimerEvent& event);
+        void ResultsPosted(wxCommandEvent& event);
         void startThreads(size_t n);
         void stopThreads();
 

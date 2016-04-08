@@ -1,12 +1,16 @@
 #ifndef URLTHREAD_H
 #define URLTHREAD_H
 
-#include <wx/thread.h>
 #include <string>
 #include <vector>
-#include <wx/url.h>
+
 #include <wx/msgqueue.h>
+#include <wx/thread.h>
+#include <wx/event.h>
+#include <wx/url.h>
+
 #include "URLSearchRecord.h"
+
 
 
 class URLThread : public wxThread
@@ -14,7 +18,8 @@ class URLThread : public wxThread
     public:
         URLThread(const std::vector<std::string>& terms,
                   wxMessageQueue<wxURL>* urls,
-                  wxMessageQueue<URLSearchRecord>* results_mq);
+                  wxMessageQueue<URLSearchRecord>* results_mq,
+                  wxEvtHandler* handler = nullptr);
         virtual ~URLThread();
     protected:
         virtual ExitCode Entry();
@@ -26,6 +31,7 @@ class URLThread : public wxThread
         std::vector<std::string> terms;
         wxMessageQueue<wxURL>* urls;
         wxMessageQueue<URLSearchRecord>* results_mq;
+        wxEvtHandler* handler;
 };
 
 #endif // URLTHREAD_H

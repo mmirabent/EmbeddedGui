@@ -7,10 +7,14 @@
 #include <wx/sstream.h>
 
 
-URLThread::URLThread(const std::vector<std::string>& terms, wxMessageQueue<wxURL>* urls, wxMessageQueue<URLSearchRecord>* results_mq) :
+URLThread::URLThread(const std::vector<std::string>& terms,
+                     wxMessageQueue<wxURL>* urls,
+                     wxMessageQueue<URLSearchRecord>* results_mq,
+                     wxEvtHandler* handler) :
     terms(terms),
     urls(urls),
-    results_mq(results_mq)
+    results_mq(results_mq),
+    handler(handler)
 {
 
 }
