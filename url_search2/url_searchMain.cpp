@@ -204,8 +204,6 @@ void url_searchFrame::readURLsFromFile(const wxString& path,
         wxURL url(str);
         if(url.IsOk())
         {
-            std::cout << "Pushing " << url.GetServer().ToStdString()
-                      << url.GetPath().ToStdString() << "\n";
             urls.push_back(url);
         }
     }
@@ -233,11 +231,10 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path,
 void url_searchFrame::OnTimerTick(wxTimerEvent&)
 {
     URLSearchRecord result;
-    if(results_mq->ReceiveTimeout(50,result) == wxMSGQUEUE_NO_ERROR)
+    if(results_mq->ReceiveTimeout(5,result) == wxMSGQUEUE_NO_ERROR)
     {
         *OutputTextCtrl << wxString(result.toString());
         OutputTextCtrl->MarkDirty();
-        std::cout << "Processing results\n";
         urls_done++;
         ProgressGauge->SetValue(urls_done);
     }
