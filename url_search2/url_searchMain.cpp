@@ -64,8 +64,6 @@ const long url_searchFrame::idMenuAbout = wxNewId();
 const long url_searchFrame::ID_STATUSBAR1 = wxNewId();
 //*)
 
-wxDEFINE_EVENT(RESULTS_POSTED_EVENT, wxCommandEvent);
-
 BEGIN_EVENT_TABLE(url_searchFrame,wxFrame)
     EVT_TIMER(wxID_ANY,url_searchFrame::OnTimerTick)
     EVT_COMMAND(wxID_ANY,RESULTS_POSTED_EVENT,url_searchFrame::ResultsPosted)
@@ -279,7 +277,7 @@ void url_searchFrame::startThreads(size_t)
 
     for(i = 0; i < n; i++)
     {
-        URLThread* thread = new URLThread(*terms, url_mq, results_mq);
+        URLThread* thread = new URLThread(*terms, url_mq, results_mq,this);
         thread->Run();
         threads.push_back(thread);
     }
@@ -297,6 +295,13 @@ void url_searchFrame::stopThreads()
     StartButton->Enable();
     ThreadSpinCtrl->Enable();
     StopButton->Disable();
+
+    for(auto& thread : threads)
+    {
+        thread->Delete();
+    }
+
+    threads.clear();
 }
 
 

@@ -11,7 +11,7 @@
 
 #include "URLSearchRecord.h"
 
-
+wxDEFINE_EVENT(RESULTS_POSTED_EVENT,wxCommandEvent);
 
 class URLThread : public wxThread
 {
@@ -19,7 +19,7 @@ class URLThread : public wxThread
         URLThread(const std::vector<std::string>& terms,
                   wxMessageQueue<wxURL>* urls,
                   wxMessageQueue<URLSearchRecord>* results_mq,
-                  wxEvtHandler* handler = nullptr);
+                  wxEvtHandler* handler);
         virtual ~URLThread();
     protected:
         virtual ExitCode Entry();

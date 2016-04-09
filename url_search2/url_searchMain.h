@@ -31,8 +31,6 @@
 #include <wx/textctrl.h>
 //*)
 
-wxDECLARE_EVENT(RESULTS_POSTED_EVENT, wxCommandEvent);
-
 class url_searchFrame: public wxFrame
 {
     public:

@@ -6,6 +6,7 @@
 #include <sstream>
 #include <wx/sstream.h>
 
+wxDECLARE_EVENT(RESULTS_POSTED_EVENT,wxCommandEvent);
 
 URLThread::URLThread(const std::vector<std::string>& terms,
                      wxMessageQueue<wxURL>* urls,
@@ -44,33 +45,37 @@ wxThread::ExitCode URLThread::Entry()
     wxURL url;
     wxMessageQueueError error;
 
-    while((error = urls->Receive(url)) == wxMSGQUEUE_NO_ERROR)
+    while(!TestDestroy())
     {
-        URLSearchRecord result(url);
-
-        if(url.GetError() == wxURL_NOERR)
+        if((error = urls->ReceiveTimeout(5,url)) == wxMSGQUEUE_NO_ERROR)
         {
-            // Actually perform the get request and load the response into get
-            wxInputStream* stream = url.GetInputStream();
-
-            // Trap for young players. GetInputStream can fail and return null.
-            // This is not in the docs
-            if(stream != nullptr)
+            URLSearchRecord result(url);
+            if(url.GetError() == wxURL_NOERR)
             {
-                wxString body;
-                wxStringOutputStream out_stream(&body);
-                stream->Read(out_stream);
+                // Actually perform the get request and load the response into get
+                wxInputStream* stream = url.GetInputStream();
 
-                for(std::string& term : terms)
+                // Trap for young players. GetInputStream can fail and return null.
+                // This is not in the docs
+                if(stream != nullptr && stream->IsOk())
                 {
-                    std::transform(term.begin(), term.end(), term.begin(), ::tolower);
-                    result.addSearchResult(term, countSubstringsInString(term,body.Lower().ToStdString()));
-                }
-            }
+                    wxString* body = new wxString();
+                    wxStringOutputStream out_stream(body);
+                    stream->Read(out_stream);
 
-            delete stream;
+                    for(std::string& term : terms)
+                    {
+                        std::transform(term.begin(), term.end(), term.begin(), ::tolower);
+                        result.addSearchResult(term, countSubstringsInString(term,body->Lower().ToStdString()));
+                        handler->QueueEvent(new wxCommandEvent(RESULTS_POSTED_EVENT));
+                    }
+                    delete body;
+                }
+                delete stream;
+
+            }
+            results_mq->Post(result);
         }
-        results_mq->Post(result);
     }
 
     return (wxThread::ExitCode)0;
