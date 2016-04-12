@@ -6,8 +6,6 @@
 #include <sstream>
 #include <wx/sstream.h>
 
-wxDECLARE_EVENT(RESULTS_POSTED_EVENT,wxCommandEvent);
-
 URLThread::URLThread(const std::vector<std::string>& terms,
                      wxMessageQueue<wxURL>* urls,
                      wxMessageQueue<URLSearchRecord>* results_mq,
@@ -67,7 +65,6 @@ wxThread::ExitCode URLThread::Entry()
                     {
                         std::transform(term.begin(), term.end(), term.begin(), ::tolower);
                         result.addSearchResult(term, countSubstringsInString(term,body->Lower().ToStdString()));
-                        handler->QueueEvent(new wxCommandEvent(RESULTS_POSTED_EVENT));
                     }
                     delete body;
                 }

@@ -66,7 +66,6 @@ const long url_searchFrame::ID_STATUSBAR1 = wxNewId();
 
 BEGIN_EVENT_TABLE(url_searchFrame,wxFrame)
     EVT_TIMER(wxID_ANY,url_searchFrame::OnTimerTick)
-    EVT_COMMAND(wxID_ANY,RESULTS_POSTED_EVENT,url_searchFrame::ResultsPosted)
     //(*EventTable(url_searchFrame)
     //*)
 END_EVENT_TABLE()
@@ -248,12 +247,6 @@ void url_searchFrame::OnTimerTick(wxTimerEvent&)
 void url_searchFrame::OnStopButtonClick(wxCommandEvent&)
 {
     stopThreads();
-
-}
-
-void url_searchFrame::ResultsPosted(wxCommandEvent&)
-{
-    std::cout << "Posted!" << std::endl;
 }
 
 void url_searchFrame::startThreads(size_t)
