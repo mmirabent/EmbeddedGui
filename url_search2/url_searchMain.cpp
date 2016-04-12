@@ -65,13 +65,14 @@ const long url_searchFrame::ID_STATUSBAR1 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(url_searchFrame,wxFrame)
-    EVT_TIMER(wxID_ANY,url_searchFrame::OnTimerTick)
+    EVT_IDLE(url_searchFrame::OnIdle)
     //(*EventTable(url_searchFrame)
     //*)
 END_EVENT_TABLE()
 
 url_searchFrame::url_searchFrame(wxWindow* parent,wxWindowID) :
-    threads()
+    threads(),
+    threadsRunning(false)
 {
     //(*Initialize(url_searchFrame)
     wxMenuItem* MenuItem2;
@@ -160,10 +161,12 @@ url_searchFrame::~url_searchFrame()
 {
     //(*Destroy(url_searchFrame)
     //*)
+    stopThreads();
 }
 
 void url_searchFrame::OnQuit(wxCommandEvent&)
 {
+    stopThreads();
     Close();
 }
 
@@ -228,22 +231,6 @@ void url_searchFrame::readSearchTermsFromFile(const wxString& path,
     file.Close();
 }
 
-void url_searchFrame::OnTimerTick(wxTimerEvent&)
-{
-    URLSearchRecord result;
-    if(results_mq->ReceiveTimeout(5,result) == wxMSGQUEUE_NO_ERROR)
-    {
-        *OutputTextCtrl << wxString(result.toString());
-        OutputTextCtrl->MarkDirty();
-        urls_done++;
-        ProgressGauge->SetValue(urls_done);
-    }
-    if(urls_done == url_size)
-    {
-        stopThreads();
-    }
-}
-
 void url_searchFrame::OnStopButtonClick(wxCommandEvent&)
 {
     stopThreads();
@@ -260,6 +247,7 @@ void url_searchFrame::startThreads(size_t)
 
     url_size = urls->size();
     ProgressGauge->SetRange(url_size);
+    ProgressGauge->SetValue(0);
 
     for(wxURL& url : *urls)
     {
@@ -279,6 +267,7 @@ void url_searchFrame::startThreads(size_t)
     StartButton->Disable();
     ThreadSpinCtrl->Disable();
     StopButton->Enable();
+    threadsRunning = true;
 }
 
 void url_searchFrame::stopThreads()
@@ -295,6 +284,28 @@ void url_searchFrame::stopThreads()
     }
 
     threads.clear();
+    threadsRunning = false;
+}
+
+void url_searchFrame::OnIdle(wxIdleEvent& event)
+{
+    if(threadsRunning)
+    {
+        URLSearchRecord result;
+        if(results_mq->ReceiveTimeout(1,result) == wxMSGQUEUE_NO_ERROR)
+        {
+            *OutputTextCtrl << wxString(result.toString());
+            OutputTextCtrl->MarkDirty();
+            urls_done++;
+            ProgressGauge->SetValue(urls_done);
+
+            event.RequestMore();
+        }
+        if(urls_done == url_size)
+        {
+            stopThreads();
+        }
+    }
 }
 
 

@@ -57,10 +57,12 @@ class url_searchFrame: public wxFrame
         size_t url_size;
         size_t urls_done;
 
-        void OnTimerTick(wxTimerEvent& event);
-        void ResultsPosted(wxCommandEvent& event);
+        void OnIdle(wxIdleEvent& event);
+
         void startThreads(size_t n);
         void stopThreads();
+
+        bool threadsRunning;
 
         //(*Handlers(url_searchFrame)
         void OnQuit(wxCommandEvent& event);
