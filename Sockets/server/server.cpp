@@ -59,13 +59,27 @@ void MotorServer::OnSocketEvent(wxSocketEvent& event)
     switch(event.GetSocketEvent())
     {
         case wxSOCKET_INPUT:
+            struct Response response;
+
             unsigned char size;
+            unsigned char command;
+            unsigned char attributes[254];
 
             socket->Read(&size, sizeof(size));
+            socket->Read(&command, sizeof(command));
+            socket->Read(attributes, sizeof(size-1));
 
-            cout << "Size is " << (unsigned int)size << endl;
+            response = processCommand(command, attributes);
+
+            socket->Write(&size, sizeof(size));
             break;
     }
+}
+
+struct Response MotorServer::processCommand(unsigned char command,
+                                            unsigned char attr[254])
+{
+    // Do stuff
 }
 
 wxBEGIN_EVENT_TABLE(MotorServer,wxAppConsole)

@@ -20,8 +20,16 @@ class MotorServer : public wxAppConsole
         wxSocketServer *m_server;
 
         void startServer();
+        struct Response processCommand(unsigned char command,
+                                       unsigned char attr[254]);
 
         wxDECLARE_EVENT_TABLE();
+};
+
+struct Response
+{
+    unsigned char type;
+    unsigned char attribute[4];
 };
 
 
