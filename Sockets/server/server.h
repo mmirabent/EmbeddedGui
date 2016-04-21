@@ -7,16 +7,23 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/socket.h"
+
 class MotorServer : public wxAppConsole
 {
     public:
         virtual bool OnInit();
-        void OnTimerTick(wxTimerEvent& event);
+        void OnServerEvent(wxSocketEvent& event);
+        void OnSocketEvent(wxSocketEvent& event);
 
     private:
-        wxTimer *m_timer;
+        wxSocketServer *m_server;
+
+        void startServer();
+
         wxDECLARE_EVENT_TABLE();
 };
+
 
 #endif
 
