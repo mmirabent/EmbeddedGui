@@ -8,6 +8,7 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_BUTTON1" variable="StartButton" member="yes">
 							<label>Start</label>
+							<handler function="OnStartButtonClick" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -16,6 +17,7 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_BUTTON2" variable="StopButton" member="yes">
 							<label>Stop</label>
+							<handler function="OnStopButtonClick" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
@@ -26,6 +28,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_BUTTON3" variable="RotateLButton" member="yes">
 									<label>Rotate Left</label>
+									<handler function="OnRotateLButtonClick" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -34,6 +37,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_BUTTON4" variable="RotateRButton" member="yes">
 									<label>Rotate Right</label>
+									<handler function="OnRotateRButtonClick" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -49,6 +53,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_BUTTON5" variable="SetSpeedButton" member="yes">
 									<label>Set Speed</label>
+									<handler function="OnSetSpeedButtonClick" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>

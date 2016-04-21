@@ -32,6 +32,11 @@ class clientFrame: public wxFrame
         //(*Handlers(clientFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
+        void OnStartButtonClick(wxCommandEvent& event);
+        void OnStopButtonClick(wxCommandEvent& event);
+        void OnRotateLButtonClick(wxCommandEvent& event);
+        void OnRotateRButtonClick(wxCommandEvent& event);
+        void OnSetSpeedButtonClick(wxCommandEvent& event);
         //*)
 
         //(*Identifiers(clientFrame)

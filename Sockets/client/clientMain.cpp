@@ -118,6 +118,11 @@ clientFrame::clientFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->Fit(this);
     BoxSizer1->SetSizeHints(this);
 
+    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnStartButtonClick);
+    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnStopButtonClick);
+    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnRotateLButtonClick);
+    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnRotateRButtonClick);
+    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnSetSpeedButtonClick);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&clientFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&clientFrame::OnAbout);
     //*)
@@ -138,4 +143,24 @@ void clientFrame::OnAbout(wxCommandEvent& event)
 {
     wxString msg = wxbuildinfo(long_f);
     wxMessageBox(msg, _("Welcome to..."));
+}
+
+void clientFrame::OnStartButtonClick(wxCommandEvent& event)
+{
+}
+
+void clientFrame::OnStopButtonClick(wxCommandEvent& event)
+{
+}
+
+void clientFrame::OnRotateLButtonClick(wxCommandEvent& event)
+{
+}
+
+void clientFrame::OnRotateRButtonClick(wxCommandEvent& event)
+{
+}
+
+void clientFrame::OnSetSpeedButtonClick(wxCommandEvent& event)
+{
 }
