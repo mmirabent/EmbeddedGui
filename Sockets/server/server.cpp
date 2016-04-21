@@ -9,7 +9,7 @@ enum
     SOCKET_ID
 };
 
-IMPLEMENT_APP(MotorServer);
+IMPLEMENT_APP(MotorServer)
 
 bool MotorServer::OnInit()
 {
@@ -39,14 +39,38 @@ void MotorServer::startServer()
     m_server->Notify(true);
 }
 
-void MotorServer::OnServerEvent(wxSocketEvent& event)
+void MotorServer::OnServerEvent(wxSocketEvent&)
 {
+    // Get the socket base from the server
+    wxSocketBase* socket = m_server->Accept(false);
+
+    socket->SetEventHandler(*this, SOCKET_ID);
+    socket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
+    socket->Notify(true);
+
     cout << "Accepted incoming connection" << endl;
 }
 
+void MotorServer::OnSocketEvent(wxSocketEvent& event)
+{
+    wxSocketBase *socket = event.GetSocket();
+
+    // Process the event
+    switch(event.GetSocketEvent())
+    {
+        case wxSOCKET_INPUT:
+            unsigned char size;
+
+            socket->Read(&size, sizeof(size));
+
+            cout << "Size is " << (unsigned int)size << endl;
+            break;
+    }
+}
 
 wxBEGIN_EVENT_TABLE(MotorServer,wxAppConsole)
     EVT_SOCKET(SERVER_ID,MotorServer::OnServerEvent)
+    EVT_SOCKET(SOCKET_ID,MotorServer::OnSocketEvent)
 wxEND_EVENT_TABLE()
 
 
