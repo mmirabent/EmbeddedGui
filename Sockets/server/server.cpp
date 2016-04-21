@@ -73,13 +73,46 @@ void MotorServer::OnSocketEvent(wxSocketEvent& event)
 
             socket->Write(&size, sizeof(size));
             break;
+
+        case wxSOCKET_OUTPUT:
+        case wxSOCKET_CONNECTION:
+        case wxSOCKET_LOST:
+            break;
     }
 }
 
 struct Response MotorServer::processCommand(unsigned char command,
                                             unsigned char attr[254])
 {
-    // Do stuff
+    struct Response response;
+
+    switch(command)
+    {
+        case STOP_CMD:
+            cout << "Motor Stop" << endl;
+            break;
+
+        case START_CMD:
+            cout << "Motor Start" << endl;
+            break;
+
+        case ROTATE_CMD:
+            if(attr[0] == ROTATE_LEFT)
+            {
+                cout << "Rotate Left" << endl;
+            }
+            else if(attr[0] == ROTATE_RIGHT)
+            {
+                cout << "Rotate Right" << endl;
+            }
+            break;
+
+        case SPEED_CMD:
+            cout << "Speed set to " << (unsigned char)attr[0] << endl;
+            break;
+    }
+    response.type = 0x00;
+    return response;
 }
 
 wxBEGIN_EVENT_TABLE(MotorServer,wxAppConsole)

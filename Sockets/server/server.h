@@ -32,6 +32,20 @@ struct Response
     unsigned char attribute[4];
 };
 
+enum
+{
+    STOP_CMD = 0x00,
+    START_CMD,
+    ROTATE_CMD,
+    SPEED_CMD
+};
+
+enum
+{
+    ROTATE_LEFT = 0x00,
+    ROTATE_RIGHT
+};
+
 
 #endif
 
