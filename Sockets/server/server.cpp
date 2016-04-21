@@ -1,4 +1,5 @@
 #include "server.h"
+#include <cstring>
 #include <iostream>
 
 using namespace std;
@@ -55,23 +56,24 @@ void MotorServer::OnSocketEvent(wxSocketEvent& event)
 {
     wxSocketBase *socket = event.GetSocket();
 
+    cout << "Socket event" << endl;
+
     // Process the event
     switch(event.GetSocketEvent())
     {
         case wxSOCKET_INPUT:
-            struct Response response;
+            struct MotorResponse response;
+            struct MotorRequest request;
 
-            unsigned char size;
-            unsigned char command;
-            unsigned char attributes[254];
+            cout << "Socket Input" << endl;
 
-            socket->Read(&size, sizeof(size));
-            socket->Read(&command, sizeof(command));
-            socket->Read(attributes, sizeof(size-1));
+            socket->Read(&request.size, sizeof(request.size));
+            socket->Read(&request.command, sizeof(request.command));
+            socket->Read(request.attributes, sizeof(request.size-1));
 
-            response = processCommand(command, attributes);
+            response = processCommand(request);
 
-            socket->Write(&size, sizeof(size));
+            socket->Write(&request.size, sizeof(request.size));
             break;
 
         case wxSOCKET_OUTPUT:
@@ -81,12 +83,11 @@ void MotorServer::OnSocketEvent(wxSocketEvent& event)
     }
 }
 
-struct Response MotorServer::processCommand(unsigned char command,
-                                            unsigned char attr[254])
+struct MotorResponse MotorServer::processCommand(struct MotorRequest req)
 {
-    struct Response response;
+    struct MotorResponse response;
 
-    switch(command)
+    switch(req.command)
     {
         case STOP_CMD:
             cout << "Motor Stop" << endl;
@@ -97,18 +98,20 @@ struct Response MotorServer::processCommand(unsigned char command,
             break;
 
         case ROTATE_CMD:
-            if(attr[0] == ROTATE_LEFT)
+            if(req.attributes[0] == ROTATE_LEFT)
             {
                 cout << "Rotate Left" << endl;
             }
-            else if(attr[0] == ROTATE_RIGHT)
+            else if(req.attributes[0] == ROTATE_RIGHT)
             {
                 cout << "Rotate Right" << endl;
             }
             break;
 
         case SPEED_CMD:
-            cout << "Speed set to " << (unsigned char)attr[0] << endl;
+            cout << "Speed set to "
+                 << (uint8_t)req.attributes[0]
+                 << endl;
             break;
     }
     response.type = 0x00;

@@ -8,6 +8,7 @@
 #endif
 
 #include "wx/socket.h"
+#include "../motor_protocol.h"
 
 class MotorServer : public wxAppConsole
 {
@@ -20,30 +21,9 @@ class MotorServer : public wxAppConsole
         wxSocketServer *m_server;
 
         void startServer();
-        struct Response processCommand(unsigned char command,
-                                       unsigned char attr[254]);
+        struct MotorResponse processCommand(struct MotorRequest request);
 
         wxDECLARE_EVENT_TABLE();
-};
-
-struct Response
-{
-    unsigned char type;
-    unsigned char attribute[4];
-};
-
-enum
-{
-    STOP_CMD = 0x00,
-    START_CMD,
-    ROTATE_CMD,
-    SPEED_CMD
-};
-
-enum
-{
-    ROTATE_LEFT = 0x00,
-    ROTATE_RIGHT
 };
 
 
