@@ -20,6 +20,9 @@
 #include <wx/stattext.h>
 //*)
 
+#include <wx/socket.h>
+#include "../motor_protocol.h"
+
 class clientFrame: public wxFrame
 {
     public:
@@ -28,6 +31,9 @@ class clientFrame: public wxFrame
         virtual ~clientFrame();
 
     private:
+        wxSocketClient *m_client;
+        wxIPV4address m_addr;
+        struct MotorRequest *request;
 
         //(*Handlers(clientFrame)
         void OnQuit(wxCommandEvent& event);
@@ -38,6 +44,8 @@ class clientFrame: public wxFrame
         void OnRotateRButtonClick(wxCommandEvent& event);
         void OnSetSpeedButtonClick(wxCommandEvent& event);
         //*)
+
+        void OnSocketEvent(wxSocketEvent& event);
 
         //(*Identifiers(clientFrame)
         static const long ID_BUTTON1;

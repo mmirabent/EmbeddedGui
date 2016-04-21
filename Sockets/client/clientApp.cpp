@@ -14,7 +14,7 @@
 #include <wx/image.h>
 //*)
 
-IMPLEMENT_APP(clientApp);
+IMPLEMENT_APP(clientApp)
 
 bool clientApp::OnInit()
 {

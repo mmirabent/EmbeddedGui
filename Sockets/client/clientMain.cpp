@@ -8,12 +8,17 @@
  **************************************************************/
 
 #include "clientMain.h"
+#include "../motor_protocol.h"
 #include <wx/msgdlg.h>
 
 //(*InternalHeaders(clientFrame)
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
+
+#include <iostream>
+
+using namespace std;
 
 //helper functions
 enum wxbuildinfoformat {
@@ -57,6 +62,7 @@ const long clientFrame::ID_STATUSBAR1 = wxNewId();
 BEGIN_EVENT_TABLE(clientFrame,wxFrame)
     //(*EventTable(clientFrame)
     //*)
+    EVT_SOCKET(wxID_ANY,clientFrame::OnSocketEvent)
 END_EVENT_TABLE()
 
 clientFrame::clientFrame(wxWindow* parent,wxWindowID id)
@@ -132,35 +138,63 @@ clientFrame::~clientFrame()
 {
     //(*Destroy(clientFrame)
     //*)
+    m_client->Destroy();
 }
 
-void clientFrame::OnQuit(wxCommandEvent& event)
+void clientFrame::OnQuit(wxCommandEvent&)
 {
     Close();
 }
 
-void clientFrame::OnAbout(wxCommandEvent& event)
+void clientFrame::OnAbout(wxCommandEvent&)
 {
     wxString msg = wxbuildinfo(long_f);
     wxMessageBox(msg, _("Welcome to..."));
 }
 
-void clientFrame::OnStartButtonClick(wxCommandEvent& event)
+void clientFrame::OnStartButtonClick(wxCommandEvent&)
+{
+    m_client = new wxSocketClient();
+    m_client->SetEventHandler(*this,wxID_ANY);
+    m_client->SetNotify(wxSOCKET_CONNECTION_FLAG |
+                        wxSOCKET_INPUT_FLAG|
+                        wxSOCKET_LOST_FLAG);
+
+    m_client->Notify(true);
+    m_addr = wxIPV4address();
+    m_addr.Service(3000);
+    request = new struct MotorRequest;
+    request->command = START_CMD;
+    request->size = 1;
+    m_client->Connect(m_addr,false);
+}
+
+void clientFrame::OnStopButtonClick(wxCommandEvent&)
 {
 }
 
-void clientFrame::OnStopButtonClick(wxCommandEvent& event)
+void clientFrame::OnRotateLButtonClick(wxCommandEvent&)
 {
 }
 
-void clientFrame::OnRotateLButtonClick(wxCommandEvent& event)
+void clientFrame::OnRotateRButtonClick(wxCommandEvent&)
 {
 }
 
-void clientFrame::OnRotateRButtonClick(wxCommandEvent& event)
+void clientFrame::OnSetSpeedButtonClick(wxCommandEvent&)
 {
 }
 
-void clientFrame::OnSetSpeedButtonClick(wxCommandEvent& event)
+void clientFrame::OnSocketEvent(wxSocketEvent& event)
 {
+    cout << "Socket Event" << endl;
+    wxSocketBase* socket = event.GetSocket();
+
+    switch(event.GetSocketEvent())
+    {
+        case wxSOCKET_CONNECTION:
+            socket->Write(request,sizeof(request));
+            ResponseText->SetLabel(wxT("Sent"));
+            break;
+    }
 }
