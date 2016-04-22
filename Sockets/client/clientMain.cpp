@@ -184,14 +184,33 @@ void clientFrame::OnStopButtonClick(wxCommandEvent&)
 
 void clientFrame::OnRotateLButtonClick(wxCommandEvent&)
 {
+    delete request;
+    request = new struct MotorRequest;
+    request->command = ROTATE_CMD;
+    request->attributes[0] = ROTATE_LEFT;
+    request->size = 3;
+    m_client->Connect(m_addr,false);
 }
 
 void clientFrame::OnRotateRButtonClick(wxCommandEvent&)
 {
+    delete request;
+    request = new struct MotorRequest;
+    request->command = ROTATE_CMD;
+    request->attributes[0] = ROTATE_RIGHT;
+    request->size = 3;
+    m_client->Connect(m_addr,false);
 }
 
 void clientFrame::OnSetSpeedButtonClick(wxCommandEvent&)
 {
+    unsigned char speed = (unsigned char)SpeedSpinCtrl->GetValue();
+    delete request;
+    request = new struct MotorRequest;
+    request->command = SPEED_CMD;
+    request->attributes[0] = speed;
+    request->size = 3;
+    m_client->Connect(m_addr,false);
 }
 
 void clientFrame::OnSocketEvent(wxSocketEvent& event)
