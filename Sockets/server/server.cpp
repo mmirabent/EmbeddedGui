@@ -1,5 +1,6 @@
 #include "server.h"
 #include <cstring>
+#include <string>
 #include <iostream>
 
 using namespace std;
@@ -110,7 +111,7 @@ struct MotorResponse MotorServer::processCommand(struct MotorRequest req)
 
         case SPEED_CMD:
             cout << "Speed set to "
-                 << (uint8_t)req.attributes[0]
+                 << to_string((uint8_t)req.attributes[0])
                  << endl;
             break;
     }

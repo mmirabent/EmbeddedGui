@@ -208,7 +208,7 @@ void clientFrame::OnSetSpeedButtonClick(wxCommandEvent&)
     delete request;
     request = new struct MotorRequest;
     request->command = SPEED_CMD;
-    request->attributes[0] = speed;
+    request->attributes[0] = (uint8_t)speed;
     request->size = 3;
     m_client->Connect(m_addr,false);
 }
