@@ -132,6 +132,18 @@ clientFrame::clientFrame(wxWindow* parent,wxWindowID id)
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&clientFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&clientFrame::OnAbout);
     //*)
+
+    request = nullptr;
+
+    m_client = new wxSocketClient();
+    m_client->SetEventHandler(*this,wxID_ANY);
+    m_client->SetNotify(wxSOCKET_CONNECTION_FLAG |
+                        wxSOCKET_INPUT_FLAG|
+                        wxSOCKET_LOST_FLAG);
+
+    m_client->Notify(true);
+    m_addr = wxIPV4address();
+    m_addr.Service(3000);
 }
 
 clientFrame::~clientFrame()
@@ -154,23 +166,20 @@ void clientFrame::OnAbout(wxCommandEvent&)
 
 void clientFrame::OnStartButtonClick(wxCommandEvent&)
 {
-    m_client = new wxSocketClient();
-    m_client->SetEventHandler(*this,wxID_ANY);
-    m_client->SetNotify(wxSOCKET_CONNECTION_FLAG |
-                        wxSOCKET_INPUT_FLAG|
-                        wxSOCKET_LOST_FLAG);
-
-    m_client->Notify(true);
-    m_addr = wxIPV4address();
-    m_addr.Service(3000);
+    delete request;
     request = new struct MotorRequest;
     request->command = START_CMD;
-    request->size = 1;
+    request->size = 2;
     m_client->Connect(m_addr,false);
 }
 
 void clientFrame::OnStopButtonClick(wxCommandEvent&)
 {
+    delete request;
+    request = new struct MotorRequest;
+    request->command = STOP_CMD;
+    request->size = 2;
+    m_client->Connect(m_addr,false);
 }
 
 void clientFrame::OnRotateLButtonClick(wxCommandEvent&)
@@ -187,14 +196,14 @@ void clientFrame::OnSetSpeedButtonClick(wxCommandEvent&)
 
 void clientFrame::OnSocketEvent(wxSocketEvent& event)
 {
-    cout << "Socket Event" << endl;
     wxSocketBase* socket = event.GetSocket();
 
     switch(event.GetSocketEvent())
     {
         case wxSOCKET_CONNECTION:
-            socket->Write(request,sizeof(request));
+            socket->Write(request,request->size);
             ResponseText->SetLabel(wxT("Sent"));
+            socket->Close();
             break;
     }
 }
