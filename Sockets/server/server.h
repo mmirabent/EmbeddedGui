@@ -14,6 +14,7 @@ class MotorServer : public wxAppConsole
 {
     public:
         virtual bool OnInit();
+        virtual int OnExit();
         void OnServerEvent(wxSocketEvent& event);
         void OnSocketEvent(wxSocketEvent& event);
 

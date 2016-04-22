@@ -14,9 +14,15 @@ IMPLEMENT_APP(MotorServer)
 
 bool MotorServer::OnInit()
 {
-    cout << "Hello world!" << endl;
+    cout << "Welcome to Motor Server 3000" << endl;
     startServer();
     return true;
+}
+
+int MotorServer::OnExit()
+{
+    m_server->Destroy();
+    return 0;
 }
 
 void MotorServer::startServer()
@@ -48,15 +54,11 @@ void MotorServer::OnServerEvent(wxSocketEvent&)
     socket->SetEventHandler(*this, SOCKET_ID);
     socket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
     socket->Notify(true);
-
-    cout << "Accepted incoming connection" << endl;
 }
 
 void MotorServer::OnSocketEvent(wxSocketEvent& event)
 {
     wxSocketBase *socket = event.GetSocket();
-
-    cout << "Socket event" << endl;
 
     // Process the event
     switch(event.GetSocketEvent())
@@ -65,11 +67,9 @@ void MotorServer::OnSocketEvent(wxSocketEvent& event)
             struct MotorResponse response;
             struct MotorRequest request;
 
-            cout << "Socket Input" << endl;
-
             socket->Read(&request.size, sizeof(request.size));
             socket->Read(&request.command, sizeof(request.command));
-            socket->Read(request.attributes, sizeof(request.size-1));
+            socket->Read(request.attributes, request.size-2);
 
             response = processCommand(request);
 
