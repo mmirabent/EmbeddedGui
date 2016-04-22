@@ -47,11 +47,11 @@ wxString wxbuildinfo(wxbuildinfoformat format)
 }
 
 //(*IdInit(clientFrame)
-const long clientFrame::ID_BUTTON1 = wxNewId();
-const long clientFrame::ID_BUTTON2 = wxNewId();
-const long clientFrame::ID_BUTTON3 = wxNewId();
-const long clientFrame::ID_BUTTON4 = wxNewId();
-const long clientFrame::ID_BUTTON5 = wxNewId();
+const long clientFrame::ID_START_BUTTON = wxNewId();
+const long clientFrame::ID_STOP_BUTTON = wxNewId();
+const long clientFrame::ID_ROTATE_L_BUTTON = wxNewId();
+const long clientFrame::ID_ROTATE_R_BUTTON = wxNewId();
+const long clientFrame::ID_SPEED_BUTTON = wxNewId();
 const long clientFrame::ID_SPINCTRL1 = wxNewId();
 const long clientFrame::ID_STATICTEXT2 = wxNewId();
 const long clientFrame::idMenuQuit = wxNewId();
@@ -82,18 +82,18 @@ clientFrame::clientFrame(wxWindow* parent,wxWindowID id)
     Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE, _T("id"));
     BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
     BoxSizer2 = new wxBoxSizer(wxVERTICAL);
-    StartButton = new wxButton(this, ID_BUTTON1, _("Start"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON1"));
+    StartButton = new wxButton(this, ID_START_BUTTON, _("Start"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_START_BUTTON"));
     BoxSizer2->Add(StartButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    StopButton = new wxButton(this, ID_BUTTON2, _("Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON2"));
+    StopButton = new wxButton(this, ID_STOP_BUTTON, _("Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_STOP_BUTTON"));
     BoxSizer2->Add(StopButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
-    RotateLButton = new wxButton(this, ID_BUTTON3, _("Rotate Left"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON3"));
+    RotateLButton = new wxButton(this, ID_ROTATE_L_BUTTON, _("Rotate Left"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_ROTATE_L_BUTTON"));
     BoxSizer3->Add(RotateLButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-    RotateRButton = new wxButton(this, ID_BUTTON4, _("Rotate Right"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON4"));
+    RotateRButton = new wxButton(this, ID_ROTATE_R_BUTTON, _("Rotate Right"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_ROTATE_R_BUTTON"));
     BoxSizer3->Add(RotateRButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer2->Add(BoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    SetSpeedButton = new wxButton(this, ID_BUTTON5, _("Set Speed"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_BUTTON5"));
+    SetSpeedButton = new wxButton(this, ID_SPEED_BUTTON, _("Set Speed"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_SPEED_BUTTON"));
     BoxSizer4->Add(SetSpeedButton, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
     SpeedSpinCtrl = new wxSpinCtrl(this, ID_SPINCTRL1, _T("0"), wxDefaultPosition, wxDefaultSize, 0, 0, 255, 0, _T("ID_SPINCTRL1"));
     SpeedSpinCtrl->SetValue(_T("0"));
@@ -124,11 +124,11 @@ clientFrame::clientFrame(wxWindow* parent,wxWindowID id)
     BoxSizer1->Fit(this);
     BoxSizer1->SetSizeHints(this);
 
-    Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnStartButtonClick);
-    Connect(ID_BUTTON2,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnStopButtonClick);
-    Connect(ID_BUTTON3,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnRotateLButtonClick);
-    Connect(ID_BUTTON4,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnRotateRButtonClick);
-    Connect(ID_BUTTON5,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnSetSpeedButtonClick);
+    Connect(ID_START_BUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnButtonClick);
+    Connect(ID_STOP_BUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnButtonClick);
+    Connect(ID_ROTATE_L_BUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnButtonClick);
+    Connect(ID_ROTATE_R_BUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnButtonClick);
+    Connect(ID_SPEED_BUTTON,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&clientFrame::OnButtonClick);
     Connect(idMenuQuit,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&clientFrame::OnQuit);
     Connect(idMenuAbout,wxEVT_COMMAND_MENU_SELECTED,(wxObjectEventFunction)&clientFrame::OnAbout);
     //*)
@@ -164,55 +164,6 @@ void clientFrame::OnAbout(wxCommandEvent&)
     wxMessageBox(msg, _("Welcome to..."));
 }
 
-void clientFrame::OnStartButtonClick(wxCommandEvent&)
-{
-    delete request;
-    request = new struct MotorRequest;
-    request->command = START_CMD;
-    request->size = 2;
-    m_client->Connect(m_addr,false);
-}
-
-void clientFrame::OnStopButtonClick(wxCommandEvent&)
-{
-    delete request;
-    request = new struct MotorRequest;
-    request->command = STOP_CMD;
-    request->size = 2;
-    m_client->Connect(m_addr,false);
-}
-
-void clientFrame::OnRotateLButtonClick(wxCommandEvent&)
-{
-    delete request;
-    request = new struct MotorRequest;
-    request->command = ROTATE_CMD;
-    request->attributes[0] = ROTATE_LEFT;
-    request->size = 3;
-    m_client->Connect(m_addr,false);
-}
-
-void clientFrame::OnRotateRButtonClick(wxCommandEvent&)
-{
-    delete request;
-    request = new struct MotorRequest;
-    request->command = ROTATE_CMD;
-    request->attributes[0] = ROTATE_RIGHT;
-    request->size = 3;
-    m_client->Connect(m_addr,false);
-}
-
-void clientFrame::OnSetSpeedButtonClick(wxCommandEvent&)
-{
-    unsigned char speed = (unsigned char)SpeedSpinCtrl->GetValue();
-    delete request;
-    request = new struct MotorRequest;
-    request->command = SPEED_CMD;
-    request->attributes[0] = (uint8_t)speed;
-    request->size = 3;
-    m_client->Connect(m_addr,false);
-}
-
 void clientFrame::OnSocketEvent(wxSocketEvent& event)
 {
     wxSocketBase* socket = event.GetSocket();
@@ -225,4 +176,40 @@ void clientFrame::OnSocketEvent(wxSocketEvent& event)
             socket->Close();
             break;
     }
+}
+
+void clientFrame::OnButtonClick(wxCommandEvent& event)
+{
+    delete request;
+    request = new struct MotorRequest;
+
+    int id = event.GetId();
+
+    if(id == ID_START_BUTTON) {
+        request->command = START_CMD;
+        request->size = 2;
+
+    } else if (id == ID_STOP_BUTTON) {
+        request->command = STOP_CMD;
+        request->size = 2;
+
+    } else if (id == ID_ROTATE_L_BUTTON) {
+        request->command = ROTATE_CMD;
+        request->attributes[0] = ROTATE_LEFT;
+        request->size = 3;
+
+    } else if (id == ID_ROTATE_R_BUTTON) {
+        request->command = ROTATE_CMD;
+        request->attributes[0] = ROTATE_RIGHT;
+        request->size = 3;
+
+    } else if (id == ID_SPEED_BUTTON) {
+        int speed = SpeedSpinCtrl->GetValue();
+
+        request->command = SPEED_CMD;
+        request->attributes[0] = (uint8_t)speed;
+        request->size = 3;
+    }
+
+    m_client->Connect(m_addr,false);
 }

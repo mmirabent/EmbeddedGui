@@ -38,21 +38,17 @@ class clientFrame: public wxFrame
         //(*Handlers(clientFrame)
         void OnQuit(wxCommandEvent& event);
         void OnAbout(wxCommandEvent& event);
-        void OnStartButtonClick(wxCommandEvent& event);
-        void OnStopButtonClick(wxCommandEvent& event);
-        void OnRotateLButtonClick(wxCommandEvent& event);
-        void OnRotateRButtonClick(wxCommandEvent& event);
-        void OnSetSpeedButtonClick(wxCommandEvent& event);
+        void OnButtonClick(wxCommandEvent& event);
         //*)
 
         void OnSocketEvent(wxSocketEvent& event);
 
         //(*Identifiers(clientFrame)
-        static const long ID_BUTTON1;
-        static const long ID_BUTTON2;
-        static const long ID_BUTTON3;
-        static const long ID_BUTTON4;
-        static const long ID_BUTTON5;
+        static const long ID_START_BUTTON;
+        static const long ID_STOP_BUTTON;
+        static const long ID_ROTATE_L_BUTTON;
+        static const long ID_ROTATE_R_BUTTON;
+        static const long ID_SPEED_BUTTON;
         static const long ID_SPINCTRL1;
         static const long ID_STATICTEXT2;
         static const long idMenuQuit;
