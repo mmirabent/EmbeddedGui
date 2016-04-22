@@ -172,9 +172,13 @@ void clientFrame::OnSocketEvent(wxSocketEvent& event)
     {
         case wxSOCKET_CONNECTION:
             socket->Write(request,request->size);
-            ResponseText->SetLabel(wxT("Sent"));
-            socket->Close();
             break;
+
+        case wxSOCKET_INPUT:
+            struct MotorResponse *response = new struct MotorResponse;
+            socket->Read(response,sizeof(response));
+            socket->Close();
+            ResponseText->SetLabel(wxString::Format(wxT("%i"),response->type));
     }
 }
 

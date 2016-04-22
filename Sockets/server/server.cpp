@@ -74,7 +74,7 @@ void MotorServer::OnSocketEvent(wxSocketEvent& event)
 
             response = processCommand(request);
 
-            socket->Write(&request.size, sizeof(request.size));
+            socket->Write(&response, sizeof(response));
             break;
 
         case wxSOCKET_OUTPUT:
@@ -116,6 +116,7 @@ struct MotorResponse MotorServer::processCommand(struct MotorRequest req)
             break;
     }
     response.type = 0x00;
+    response.attribute = 0x00;
     return response;
 }
 
