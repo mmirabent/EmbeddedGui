@@ -168,17 +168,39 @@ void clientFrame::OnSocketEvent(wxSocketEvent& event)
 {
     wxSocketBase* socket = event.GetSocket();
 
+    std::cout << "Socket event" << event.GetSocketEvent() << std::endl;
+
     switch(event.GetSocketEvent())
     {
         case wxSOCKET_CONNECTION:
+            {
             socket->Write(request,request->size);
             break;
+            }
 
         case wxSOCKET_INPUT:
+            {
             struct MotorResponse *response = new struct MotorResponse;
             socket->Read(response,sizeof(response));
             socket->Close();
-            ResponseText->SetLabel(wxString::Format(wxT("%i"),response->type));
+
+            wxString label;
+            if(response->type == RESPONSE_OK)
+                label << "Ok";
+            else if(response->type == RESPONSE_INFO)
+                label << "Info";
+            else if(response->type == RESPONSE_ERROR)
+                label << "Error";
+            else
+                label << "Unknown";
+
+            ResponseText->SetLabel(label);
+            break;
+            }
+
+        case wxSOCKET_OUTPUT:
+        case wxSOCKET_LOST:
+            break;
     }
 }
 
